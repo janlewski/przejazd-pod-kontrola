@@ -7,7 +7,10 @@ export function FictionalDataBanner({ className, children }: { className?: strin
     <div
       role="note"
       aria-label="Dane fikcyjne"
-      className={cn('fictional-frame flex items-start gap-3 rounded-sm bg-card px-3 py-2', className)}
+      className={cn(
+        'fictional-frame flex flex-col items-start gap-1.5 rounded-sm bg-card px-3 py-2 sm:flex-row sm:gap-3',
+        className,
+      )}
     >
       {/* One text line tall, so the badge centres on the first line even when the text wraps. */}
       <Badge variant="fictional" className="h-5 py-0 leading-none">

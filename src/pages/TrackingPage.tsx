@@ -118,7 +118,41 @@ export default function TrackingPage() {
         </Alert>
       ) : null}
 
-      <div className="rounded-sm border bg-card">
+      <ul
+        aria-label="Zadania wdrożenia"
+        className="flex flex-col divide-y rounded-sm border bg-card md:hidden"
+      >
+        {tasks.length === 0 ? (
+          <li className="p-4 text-sm text-muted-foreground">
+            Brak zadań. Dodaj środek z karty przejazdu, zakładka „Środki”.
+          </li>
+        ) : (
+          tasks.map((t) => (
+            <li key={t.id} className="flex flex-col gap-2 p-3">
+              <div className="flex items-start justify-between gap-3">
+                <span className="flex flex-col gap-0.5">
+                  <Link to={`/przejazdy/${encodeURIComponent(t.subjectId)}`} className="font-mono text-sm">
+                    {caseById(t.subjectId)?.name ?? t.subjectId}
+                  </Link>
+                  <span className="font-medium">{cmName.get(t.countermeasureId) ?? t.countermeasureId}</span>
+                </span>
+                <Button size="sm" variant="outline" className="h-10 shrink-0" onClick={() => setEditing(t)}>
+                  Edytuj<span className="sr-only"> zadanie {t.id}</span>
+                </Button>
+              </div>
+              <div className="flex flex-wrap items-center gap-3">
+                <StatusSteps status={t.status} />
+                <ResponsiblePartyBadge party={t.responsible} />
+              </div>
+              {t.note ? <p className="text-sm">{t.note}</p> : null}
+              <span className="text-xs text-muted-foreground tabular-nums">
+                {formatDateTime(t.updatedAt)}
+              </span>
+            </li>
+          ))
+        )}
+      </ul>
+      <div className="hidden rounded-sm border bg-card md:block">
         <Table aria-label="Zadania wdrożenia">
           <TableHeader>
             <TableRow>

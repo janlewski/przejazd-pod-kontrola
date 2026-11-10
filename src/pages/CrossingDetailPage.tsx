@@ -85,12 +85,12 @@ function Detail({ row, record }: { row: Row; record: FictionalCase | null }) {
               </>
             ) : null}
             <OriginBadge origin={row.origin} />
-            <Separator orientation="vertical" className="h-4!" />
+            <Separator orientation="vertical" className="hidden h-4! sm:block" />
             <CategoryBadge category={row.category} />
             <span className="text-xs text-muted-foreground">
               {row.category ? CATEGORY_LABEL[row.category] : 'Brak kategorii'}
             </span>
-            <Separator orientation="vertical" className="h-4!" />
+            <Separator orientation="vertical" className="hidden h-4! sm:block" />
             <PriorityBadge level={row.assessment.inspection.level} />
             <VerificationBadge level={row.assessment.verification.level} />
           </>
@@ -110,7 +110,7 @@ function Detail({ row, record }: { row: Row; record: FictionalCase | null }) {
       ) : null}
 
       <Tabs defaultValue="priorytet" className="gap-3">
-        <TabsList variant="line" className="w-full justify-start border-b">
+        <TabsList variant="line" className="h-11! w-full justify-start overflow-x-auto border-b md:h-9!">
           <TabsTrigger
             value="priorytet"
             className="flex-none text-muted-foreground data-[state=active]:text-foreground"

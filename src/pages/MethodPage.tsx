@@ -206,7 +206,30 @@ export default function MethodPage() {
         <h2 id="zrodla" className="text-base font-semibold">
           Źródła i licencje
         </h2>
-        <div className="rounded-sm border bg-card">
+        <ul
+          aria-label="Rejestr źródeł"
+          className="flex flex-col divide-y rounded-sm border bg-card md:hidden"
+        >
+          {sorted.map((s) => (
+            <li key={s.id} className="flex flex-col gap-1.5 p-3 text-sm">
+              <span className="text-xs text-muted-foreground">
+                {s.kind === 'dataset' ? 'Dane' : 'Dokument'}, pobrano {formatDate(s.retrievedAt)}
+              </span>
+              <span className="font-medium">{s.title}</span>
+              <span className="text-xs text-muted-foreground">{s.publisher}</span>
+              <SourceLink url={s.url} />
+              <span className="text-xs">
+                <span className="text-muted-foreground">Warunki: </span>
+                {s.license}
+              </span>
+              <span className="text-xs">
+                <span className="text-muted-foreground">Przetworzenie: </span>
+                {s.processing}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <div className="hidden rounded-sm border bg-card md:block">
           <Table aria-label="Rejestr źródeł">
             <TableHeader>
               <TableRow>

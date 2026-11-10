@@ -57,7 +57,29 @@ export default function CountermeasuresPage() {
         </dl>
       </div>
 
-      <div className="rounded-sm border bg-card">
+      <ul
+        aria-label="Katalog środków zaradczych"
+        className="flex flex-col divide-y rounded-sm border bg-card md:hidden"
+      >
+        {list.map((cm) => (
+          <li key={cm.id} className="flex flex-col gap-2 p-3">
+            <div className="flex flex-col gap-1">
+              <span className="font-medium">{cm.namePl}</span>
+              <EvidenceBadge evidence={cm.evidence} />
+            </div>
+            <p className="text-sm">{cm.effectNote}</p>
+            <div className="flex flex-wrap items-center gap-2 text-xs">
+              <ResponsiblePartyBadge party={cm.responsible} />
+              <span>Koszt: {COST_LABEL[cm.costClass].toLowerCase()}</span>
+              <span className="font-mono">Kat. {cm.applicableCategories.join(' ')}</span>
+            </div>
+            <Button size="sm" variant="outline" className="h-10 self-start" onClick={() => setOpen(cm)}>
+              Szczegóły<span className="sr-only">: {cm.namePl}</span>
+            </Button>
+          </li>
+        ))}
+      </ul>
+      <div className="hidden rounded-sm border bg-card md:block">
         <Table aria-label="Katalog środków zaradczych">
           <TableHeader>
             <TableRow>

@@ -1,4 +1,5 @@
 import { useCallback, useDeferredValue, useMemo, useState } from 'react'
+import { SlidersHorizontal } from 'lucide-react'
 import { Link, useSearchParams } from 'react-router'
 import { FictionalDataBanner } from '@/components/common/FictionalDataBanner'
 import { FilterSelect } from '@/components/common/FilterSelect'
@@ -24,6 +25,7 @@ import { caseById, caseRows } from '@/data'
 import type { Row } from '@/domain/assess'
 import { useRealData } from '@/hooks/useRealData'
 import { formatInt } from '@/lib/format'
+import { cn } from '@/lib/utils'
 
 type Filters = {
   q: string
@@ -73,6 +75,7 @@ export default function CrossingsPage() {
     gpr: (params.get('gpr') as Filters['gpr']) ?? DEFAULTS.gpr,
   }
   const [colorMode, setColorMode] = useState<ColorMode>('priority')
+  const [filtersOpen, setFiltersOpen] = useState(false)
   const [query, setQuery] = useState(filters.q)
   const deferredQuery = useDeferredValue(query)
 
@@ -106,6 +109,7 @@ export default function CrossingsPage() {
       { replace: true },
     )
   const { origin, category, inspection, verification, gpr } = filters
+  const activeFilters = [origin, category, inspection, verification, gpr].filter((v) => v !== 'all').length
   const filtered = useMemo(
     () => applyFilters(allRows, { q: deferredQuery, origin, category, inspection, verification, gpr }),
     [allRows, deferredQuery, origin, category, inspection, verification, gpr],
@@ -143,81 +147,102 @@ export default function CrossingsPage() {
         className="flex flex-wrap items-end gap-x-3 gap-y-2"
         onSubmit={(e) => e.preventDefault()}
       >
-        <div className="flex flex-col gap-1">
-          <Label htmlFor="q" className="text-xs text-muted-foreground">
-            Numer, identyfikator lub jednostka
-          </Label>
-          <Input
-            id="q"
-            value={query}
-            onChange={(e) => {
-              setQuery(e.target.value)
-              setParams(
-                (p) => {
-                  if (e.target.value) p.set('q', e.target.value)
-                  else p.delete('q')
-                  return p
-                },
-                { replace: true },
-              )
-            }}
-            placeholder="np. 082 006 629 lub X1"
-            className="h-8 w-52 bg-card"
+        <div className="flex w-full items-end gap-2 md:w-auto">
+          <div className="flex flex-1 flex-col gap-1">
+            <Label htmlFor="q" className="text-xs text-muted-foreground">
+              Numer, identyfikator lub jednostka
+            </Label>
+            <Input
+              id="q"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value)
+                setParams(
+                  (p) => {
+                    if (e.target.value) p.set('q', e.target.value)
+                    else p.delete('q')
+                    return p
+                  },
+                  { replace: true },
+                )
+              }}
+              placeholder="np. 082 006 629 lub X1"
+              className="h-10 w-full bg-card md:h-8 md:w-52"
+            />
+          </div>
+          <Button
+            type="button"
+            variant="outline"
+            className="h-10 shrink-0 bg-card md:hidden"
+            aria-expanded={filtersOpen}
+            aria-controls="filtry"
+            onClick={() => setFiltersOpen((o) => !o)}
+          >
+            <SlidersHorizontal aria-hidden />
+            Filtry{activeFilters > 0 ? ` (${activeFilters})` : ''}
+          </Button>
+        </div>
+        <div
+          id="filtry"
+          className={cn('grid w-full grid-cols-2 gap-2 md:contents', !filtersOpen && 'hidden')}
+        >
+          <FilterSelect
+            label="Pochodzenie"
+            value={filters.origin}
+            onChange={(v) => setFilter('origin', v)}
+            options={[
+              { value: 'all', label: 'Wszystkie' },
+              { value: 'real', label: 'Realne' },
+              { value: 'fictional', label: 'Fikcyjne (X1–X10)' },
+            ]}
+          />
+          <FilterSelect
+            label="Kategoria"
+            value={filters.category}
+            onChange={(v) => setFilter('category', v)}
+            options={[
+              { value: 'all', label: 'Wszystkie' },
+              ...(['A', 'B', 'C', 'D', 'E', 'F'] as const).map((c) => ({
+                value: c,
+                label: `Kategoria ${c}`,
+              })),
+              { value: 'none', label: 'Brak kategorii' },
+            ]}
+          />
+          <FilterSelect
+            label="Priorytet kontroli"
+            value={filters.inspection}
+            onChange={(v) => setFilter('inspection', v)}
+            options={[
+              { value: 'all', label: 'Wszystkie' },
+              { value: 'P1', label: 'P1' },
+              { value: 'P2', label: 'P2' },
+              { value: 'P3', label: 'P3' },
+              { value: 'none', label: 'Brak oceny' },
+            ]}
+          />
+          <FilterSelect
+            label="Weryfikacja danych"
+            value={filters.verification}
+            onChange={(v) => setFilter('verification', v)}
+            options={[
+              { value: 'all', label: 'Wszystkie' },
+              { value: 'V1', label: 'V1' },
+              { value: 'V2', label: 'V2' },
+              { value: 'V3', label: 'V3' },
+            ]}
+          />
+          <FilterSelect
+            label="Dane GPR"
+            value={filters.gpr}
+            onChange={(v) => setFilter('gpr', v)}
+            options={[
+              { value: 'all', label: 'Wszystkie' },
+              { value: 'matched', label: 'Z dopasowaniem GPR' },
+              { value: 'unmatched', label: 'Bez danych GPR' },
+            ]}
           />
         </div>
-        <FilterSelect
-          label="Pochodzenie"
-          value={filters.origin}
-          onChange={(v) => setFilter('origin', v)}
-          options={[
-            { value: 'all', label: 'Wszystkie' },
-            { value: 'real', label: 'Realne' },
-            { value: 'fictional', label: 'Fikcyjne (X1–X10)' },
-          ]}
-        />
-        <FilterSelect
-          label="Kategoria"
-          value={filters.category}
-          onChange={(v) => setFilter('category', v)}
-          options={[
-            { value: 'all', label: 'Wszystkie' },
-            ...(['A', 'B', 'C', 'D', 'E', 'F'] as const).map((c) => ({ value: c, label: `Kategoria ${c}` })),
-            { value: 'none', label: 'Brak kategorii' },
-          ]}
-        />
-        <FilterSelect
-          label="Priorytet kontroli"
-          value={filters.inspection}
-          onChange={(v) => setFilter('inspection', v)}
-          options={[
-            { value: 'all', label: 'Wszystkie' },
-            { value: 'P1', label: 'P1' },
-            { value: 'P2', label: 'P2' },
-            { value: 'P3', label: 'P3' },
-            { value: 'none', label: 'Brak oceny' },
-          ]}
-        />
-        <FilterSelect
-          label="Weryfikacja danych"
-          value={filters.verification}
-          onChange={(v) => setFilter('verification', v)}
-          options={[
-            { value: 'all', label: 'Wszystkie' },
-            { value: 'V1', label: 'V1' },
-            { value: 'V2', label: 'V2' },
-            { value: 'V3', label: 'V3' },
-          ]}
-        />
-        <FilterSelect
-          label="Dane GPR"
-          value={filters.gpr}
-          onChange={(v) => setFilter('gpr', v)}
-          options={[
-            { value: 'all', label: 'Wszystkie' },
-            { value: 'matched', label: 'Z dopasowaniem GPR' },
-            { value: 'unmatched', label: 'Bez danych GPR' },
-          ]}
-        />
         <p className="ml-auto self-end pb-1.5 text-xs text-muted-foreground tabular-nums" aria-live="polite">
           {real.status === 'loading'
             ? 'Wczytywanie realnych przejazdów…'
@@ -225,19 +250,19 @@ export default function CrossingsPage() {
         </p>
       </form>
 
-      <FictionalDataBanner>
+      <FictionalDataBanner className="order-last lg:order-none">
         X1–X10 (romby, szare wiersze) to zmyślone zdarzenia na realnych przejazdach: numer, położenie i
         kategoria są prawdziwe, objawy i naruszenia nie. Pozostałe przejazdy nie mają danych o kontrolach,
         stąd „brak oceny”.
       </FictionalDataBanner>
 
-      <div className="grid gap-3 lg:h-[max(560px,calc(100svh-19.5rem))] lg:grid-cols-[minmax(0,13fr)_minmax(0,11fr)] 2xl:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-3 lg:h-[max(560px,calc(100svh-19.5rem))] lg:grid-cols-[minmax(0,13fr)_minmax(0,11fr)] 2xl:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
         <section aria-label="Mapa" className="flex min-h-0 flex-col gap-2">
           <CrossingMap
             rows={filtered}
             colorMode={colorMode}
             selectedId={selectedId}
-            className="h-[55svh] min-h-[360px] lg:h-auto lg:min-h-0 lg:flex-1"
+            className="h-[50svh] min-h-[320px] lg:h-auto lg:min-h-0 lg:flex-1"
           />
           <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
             <MapLegend colorMode={colorMode} />
@@ -277,7 +302,7 @@ export default function CrossingsPage() {
         </div>
       </div>
 
-      <p className="text-xs text-muted-foreground">
+      <p className="order-last text-xs text-muted-foreground lg:order-none">
         <SourceFootnote sourceId="gugik-wfs-przejazdy" />. <SourceFootnote sourceId="gddkia-gpr-2025" />.
       </p>
     </>

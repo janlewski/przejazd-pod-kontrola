@@ -20,6 +20,39 @@ export function ResponsibilityNote() {
   )
 }
 
+function TaskAction({
+  subjectId,
+  countermeasure: cm,
+  large = false,
+}: {
+  subjectId: string
+  countermeasure: RankedCountermeasure['countermeasure']
+  large?: boolean
+}) {
+  const task = useTasks((s) => s.tasks.find((t) => t.subjectId === subjectId && t.countermeasureId === cm.id))
+  const addTask = useTasks((s) => s.addTask)
+  if (task) {
+    return (
+      <Link to="/wdrozenia" className={large ? 'self-start text-sm' : 'text-xs'}>
+        W wdrożeniach: {TASK_STATUS_LABEL[task.status].toLowerCase()}
+      </Link>
+    )
+  }
+  return (
+    <Button
+      size={large ? 'sm' : 'xs'}
+      variant="outline"
+      className={large ? 'h-10 self-start' : undefined}
+      onClick={() => {
+        addTask({ subjectId, countermeasureId: cm.id, responsible: cm.responsible })
+        toast.success(`Dodano zadanie: ${cm.namePl}`, { description: `${subjectId}, status: zaplanowane` })
+      }}
+    >
+      Dodaj do wdrożeń
+    </Button>
+  )
+}
+
 export function RankedCountermeasureTable({
   subjectId,
   ranked,
@@ -27,12 +60,45 @@ export function RankedCountermeasureTable({
   subjectId: string
   ranked: RankedCountermeasure[]
 }) {
-  const tasks = useTasks((s) => s.tasks)
-  const addTask = useTasks((s) => s.addTask)
-
   return (
     <div className="flex flex-col gap-2">
-      <div className="rounded-sm border bg-card">
+      <ol
+        aria-label="Środki zaradcze uszeregowane według siły dowodu"
+        className="flex flex-col divide-y rounded-sm border bg-card md:hidden"
+      >
+        {ranked.map((r, i) => {
+          const cm = r.countermeasure
+          return (
+            <li key={cm.id} className="flex flex-col gap-2 p-3">
+              <div className="flex gap-2">
+                <span className="font-mono text-xs text-muted-foreground tabular-nums">{i + 1}.</span>
+                <span className="flex flex-col gap-1">
+                  <span className="font-medium">{cm.namePl}</span>
+                  <EvidenceBadge evidence={cm.evidence} />
+                </span>
+              </div>
+              <p className="text-sm">{cm.effectNote}</p>
+              <p className="text-xs text-muted-foreground">
+                Odpowiada na: {r.addresses.map((id) => causeName.get(id) ?? id).join('; ')}
+              </p>
+              {r.categoryFit === 'not_listed' ? (
+                <p className="text-xs">Nietypowy dla tej kategorii ({cm.applicableCategories.join(', ')})</p>
+              ) : null}
+              <div className="flex flex-wrap items-center gap-2 text-xs">
+                <ResponsiblePartyBadge party={cm.responsible} />
+                <span>Koszt: {COST_LABEL[cm.costClass].toLowerCase()}</span>
+              </div>
+              <p className="flex flex-wrap gap-x-3 text-xs">
+                {cm.sourceUrls.map((u) => (
+                  <SourceLink key={u} url={u} />
+                ))}
+              </p>
+              <TaskAction subjectId={subjectId} countermeasure={cm} large />
+            </li>
+          )
+        })}
+      </ol>
+      <div className="hidden rounded-sm border bg-card md:block">
         <Table aria-label="Środki zaradcze uszeregowane według siły dowodu">
           <TableHeader>
             <TableRow>
@@ -49,7 +115,6 @@ export function RankedCountermeasureTable({
           <TableBody>
             {ranked.map((r, i) => {
               const cm = r.countermeasure
-              const task = tasks.find((t) => t.subjectId === subjectId && t.countermeasureId === cm.id)
               return (
                 <TableRow key={cm.id}>
                   <TableCell className="align-top font-mono text-xs tabular-nums">{i + 1}</TableCell>
@@ -84,24 +149,7 @@ export function RankedCountermeasureTable({
                   </TableCell>
                   <TableCell className="align-top text-xs">{COST_LABEL[cm.costClass]}</TableCell>
                   <TableCell className="align-top">
-                    {task ? (
-                      <Link to="/wdrozenia" className="text-xs">
-                        {TASK_STATUS_LABEL[task.status]}
-                      </Link>
-                    ) : (
-                      <Button
-                        size="xs"
-                        variant="outline"
-                        onClick={() => {
-                          addTask({ subjectId, countermeasureId: cm.id, responsible: cm.responsible })
-                          toast.success(`Dodano zadanie: ${cm.namePl}`, {
-                            description: `${subjectId} · status: zaplanowane`,
-                          })
-                        }}
-                      >
-                        Dodaj do wdrożeń
-                      </Button>
-                    )}
+                    <TaskAction subjectId={subjectId} countermeasure={cm} />
                   </TableCell>
                 </TableRow>
               )
