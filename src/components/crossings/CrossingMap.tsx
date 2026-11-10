@@ -84,6 +84,8 @@ export function CrossingMap({
       center: POLAND_CENTER,
       zoom: POLAND_ZOOM,
       minZoom: 5,
+      zoomSnap: 0.25,
+      zoomDelta: 0.5,
       preferCanvas: true,
     })
     L.tileLayer(TILE_URL, { attribution: TILE_ATTRIBUTION, maxZoom: TILE_MAX_ZOOM }).addTo(instance)

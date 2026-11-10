@@ -10,6 +10,7 @@ import {
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import { CategoryBadge, OriginBadge, PriorityBadge, VerificationBadge } from '@/components/common/badges'
+import { KmPlate } from '@/components/common/KmPlate'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import type { Row } from '@/domain/assess'
@@ -31,23 +32,20 @@ const columns: ColumnDef<Row>[] = [
     header: 'Przejazd',
     accessorFn: (r) => r.name,
     sortingFn: (a, b) => a.original.name.localeCompare(b.original.name, 'pl', { numeric: true }),
-    cell: ({ row: { original: r } }) => {
-      const parsed = r.origin === 'real' ? parseCrossingNumber(r.name) : null
-      return (
-        <div className="flex flex-col">
-          <Link to={`/przejazdy/${encodeURIComponent(r.id)}`} className="font-mono font-medium">
-            {r.name}
-          </Link>
+    cell: ({ row: { original: r } }) => (
+      <div className="flex flex-col items-start gap-1">
+        <Link to={`/przejazdy/${encodeURIComponent(r.id)}`} className="font-mono font-medium">
+          {r.name}
+        </Link>
+        {r.origin === 'real' && parseCrossingNumber(r.name) ? (
+          <KmPlate name={r.name} />
+        ) : (
           <span className="text-xs text-muted-foreground">
-            {parsed
-              ? `linia ${parsed.line}, km ${parsed.km}`
-              : r.origin === 'fictional'
-                ? 'położenie umowne'
-                : r.id}
+            {r.origin === 'fictional' ? 'położenie umowne' : r.id}
           </span>
-        </div>
-      )
-    },
+        )}
+      </div>
+    ),
   },
   {
     id: 'origin',

@@ -10,6 +10,7 @@ import { CATEGORY_COLOR, PRIORITY_COLOR, type ColorMode } from '@/components/cro
 import { CrossingsTable } from '@/components/crossings/CrossingsTable'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Input } from '@/components/ui/input'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { Label } from '@/components/ui/label'
 import { caseRows } from '@/data'
 import type { Row } from '@/domain/assess'
@@ -95,6 +96,7 @@ export default function CrossingsPage() {
   return (
     <>
       <PageHeader
+        station="02"
         title="Przejazdy"
         description="Lista łączy realne przejazdy PKP PLK z przypadkami fikcyjnymi X1–X10. Priorytet kontroli, priorytet weryfikacji danych i ruch drogowy to trzy osobne kolumny — nie są sumowane."
       />
@@ -193,15 +195,33 @@ export default function CrossingsPage() {
             { value: 'unmatched', label: 'Bez danych GPR' },
           ]}
         />
-        <FilterSelect
-          label="Kolor punktów na mapie"
-          value={colorMode}
-          onChange={setColorMode}
-          options={[
-            { value: 'priority', label: 'Priorytet kontroli' },
-            { value: 'category', label: 'Kategoria' },
-          ]}
-        />
+        <div className="flex flex-col gap-1">
+          <span id="kolor-mapy" className="text-xs text-muted-foreground">
+            Kolor punktów na mapie
+          </span>
+          <ToggleGroup
+            type="single"
+            variant="outline"
+            size="sm"
+            aria-labelledby="kolor-mapy"
+            value={colorMode}
+            onValueChange={(v) => v && setColorMode(v as ColorMode)}
+            className="bg-card"
+          >
+            <ToggleGroupItem
+              value="priority"
+              className="data-[state=on]:bg-foreground data-[state=on]:text-background"
+            >
+              Priorytet kontroli
+            </ToggleGroupItem>
+            <ToggleGroupItem
+              value="category"
+              className="data-[state=on]:bg-foreground data-[state=on]:text-background"
+            >
+              Kategoria
+            </ToggleGroupItem>
+          </ToggleGroup>
+        </div>
       </form>
 
       <p className="text-xs text-muted-foreground" aria-live="polite">

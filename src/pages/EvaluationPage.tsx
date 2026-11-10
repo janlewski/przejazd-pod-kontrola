@@ -26,6 +26,7 @@ export default function EvaluationPage() {
   return (
     <>
       <PageHeader
+        station="05"
         title="Ocena przed/po"
         description="Porównanie liczby naruszeń przed i po wdrożeniu środka. Wynik nie dowodzi skuteczności — to sygnał do dalszej obserwacji."
       />
