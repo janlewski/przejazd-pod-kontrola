@@ -70,7 +70,7 @@ export default function TrackingPage() {
       <PageHeader
         station="04"
         title="Wdrożenia"
-        description="Zadania wdrożenia środków: przejazd, środek, status, podmiot odpowiedzialny i notatka. Zapis w pamięci przeglądarki (localStorage) — bez serwera."
+        description="Zadania wdrożenia środków: przejazd, środek, status, podmiot odpowiedzialny i notatka."
         actions={
           <Dialog>
             <DialogTrigger asChild>
