@@ -36,6 +36,7 @@ function readJson(rel: string): unknown {
 run('fetch-crossings.ts', `--from-snapshot=${latest('crossings-')}`)
 run('parse-gpr.ts', `--from-snapshot=${latest('gpr2025-', '.zip')}`)
 run('match-gpr.ts')
+run('assign-cases.ts')
 
 const crossings = z.array(Crossing).parse(readJson('src/data/crossings.json'))
 const matches = z.array(GprMatch).parse(readJson('src/data/gpr-match.json'))
@@ -45,6 +46,9 @@ const sources = z.array(SourceRef).parse(readJson('src/data/sources.json'))
 const ids = new Set(crossings.map((c) => c.id))
 const orphan = matches.find((m) => !ids.has(m.crossingId))
 if (orphan) throw new Error(`Dopasowanie GPR bez przejazdu: ${orphan.crossingId}`)
+for (const c of cases) {
+  if (!ids.has(c.crossing.id)) throw new Error(`Przypadek ${c.id} wskazuje nieistniejący przejazd`)
+}
 const sourceIds = new Set(sources.map((s) => s.id))
 for (const id of new Set([...crossings, ...matches].map((r) => r.sourceId))) {
   if (!sourceIds.has(id)) throw new Error(`Brak wpisu w sources.json: ${id}`)

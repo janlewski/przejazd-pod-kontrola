@@ -196,7 +196,10 @@ export default function OverviewPage() {
             <CardContent className="px-4">
               <ul className="list-disc pl-5 text-sm">
                 <li>Przypadki X1–X10: objawy, wyniki kontroli, naruszenia, pociągi na dobę.</li>
-                <li>Położenie przypadków na mapie jest umowne — nie wskazują rzeczywistych przejazdów.</li>
+                <li>
+                  Przypadki osadzono na realnych przejazdach (numer, położenie, kategoria), ale zdarzenia ich
+                  nie dotyczą.
+                </li>
                 <li>Dane o zdarzeniach i kontrolach są danymi wewnętrznymi zarządców i nie są publiczne.</li>
               </ul>
             </CardContent>

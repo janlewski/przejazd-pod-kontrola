@@ -55,8 +55,26 @@ describe('data files', () => {
     expect(cases.map((c) => c.id)).toEqual(['X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8', 'X9', 'X10'])
     for (const c of cases) {
       expect(c.origin).toBe('fictional')
-      expect(c.crossingId).toBeNull()
       expect(c.name).toBe(`Przejazd ${c.id}`)
+    }
+  })
+
+  it('each case is set on a distinct real crossing that matches it and has no GPR data', () => {
+    const byId = new Map(crossings.map((x) => [x.id, x]))
+    const matched = new Set(matches.map((m) => m.crossingId))
+    expect(new Set(cases.map((c) => c.crossing.id)).size).toBe(cases.length)
+    for (const c of cases) {
+      const real = byId.get(c.crossing.id)
+      expect(real, c.id).toBeDefined()
+      expect({ name: real!.name, unit: real!.unit, lat: real!.lat, lon: real!.lon }, c.id).toEqual({
+        name: c.crossing.name,
+        unit: c.crossing.unit,
+        lat: c.crossing.lat,
+        lon: c.crossing.lon,
+      })
+      expect(real!.category, c.id).toBe(c.category)
+      // Fictional traffic must not contradict real GPR data.
+      expect(matched.has(c.crossing.id), c.id).toBe(false)
     }
   })
 

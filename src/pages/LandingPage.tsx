@@ -237,9 +237,9 @@ export default function LandingPage() {
                 Dane i przejrzystość
               </h2>
               <FictionalDataBanner>
-                Przypadki X1–X10 — objawy, kontrole, naruszenia i liczba pociągów — są zmyślone, żeby pokazać
-                działanie aplikacji. Nie opisują rzeczywistych przejazdów, a ich położenie na mapie jest
-                umowne.
+                Przypadki X1–X10 — objawy, kontrole, naruszenia, ruch i liczba pociągów — są zmyślone, żeby
+                pokazać działanie aplikacji. Każdy osadzono na realnym przejeździe wybranym według stałej
+                reguły: numer, położenie i kategoria są prawdziwe, zdarzenia nie dotyczą tych przejazdów.
               </FictionalDataBanner>
               <ul className="divide-y border-y">
                 {DATA_SOURCES.map(({ id, what }) => {

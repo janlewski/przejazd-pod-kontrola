@@ -46,11 +46,8 @@ function buildColumns(onSelect: (id: string) => void): ColumnDef<Row>[] {
               r.name
             )}
           </Link>
-          {r.origin === 'fictional' ? (
-            <OriginBadge origin="fictional" />
-          ) : parseCrossingNumber(r.name) ? (
-            <KmPlate name={r.name} />
-          ) : null}
+          {r.origin === 'fictional' ? <OriginBadge origin="fictional" /> : null}
+          {r.crossingName && parseCrossingNumber(r.crossingName) ? <KmPlate name={r.crossingName} /> : null}
         </div>
       ),
     },

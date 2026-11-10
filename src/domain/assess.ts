@@ -36,6 +36,8 @@ export type Row = {
   lat: number
   lon: number
   unit: string | null
+  /** 9-digit number of the real crossing (for fictional cases: the crossing used as setting). */
+  crossingName: string | null
   gpr: GprMatch | null
   assessment: Assessment
 }
@@ -46,9 +48,10 @@ export function caseRow(record: FictionalCase, asOf: string): Row {
     name: record.name,
     origin: 'fictional',
     category: record.category,
-    lat: record.schematicPosition.lat,
-    lon: record.schematicPosition.lon,
-    unit: null,
+    lat: record.crossing.lat,
+    lon: record.crossing.lon,
+    unit: record.crossing.unit,
+    crossingName: record.crossing.name,
     gpr: null,
     assessment: assess({ kind: 'case', record }, asOf),
   }
@@ -63,6 +66,7 @@ export function crossingRow(record: Crossing, gpr: GprMatch | null, asOf: string
     lat: record.lat,
     lon: record.lon,
     unit: record.unit,
+    crossingName: record.name,
     gpr,
     assessment: assess({ kind: 'crossing', record, gpr }, asOf),
   }

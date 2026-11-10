@@ -5,7 +5,7 @@ Demonstracyjna aplikacja webowa dla zespołów utrzymania i bezpieczeństwa prze
 
 Praca konkursowa „Kolej na bezpieczeństwo” (PKP PLK S.A.).
 
-> **DANE FIKCYJNE.** Dane o kontrolach, zdarzeniach, naruszeniach i liczbie pociągów (przypadki X1–X10) są fikcyjne i oznaczone w interfejsie etykietą „DANE FIKCYJNE”. Ich położenie na mapie jest umowne — nie wskazują rzeczywistych przejazdów. Realne są wyłącznie: położenie, numer i kategoria przejazdów PKP PLK oraz średni dobowy ruch roczny z GPR 2025.
+> **DANE FIKCYJNE.** Dane o kontrolach, zdarzeniach, naruszeniach i liczbie pociągów (przypadki X1–X10) są fikcyjne i oznaczone w interfejsie etykietą „DANE FIKCYJNE”. Każdy przypadek osadzono na realnym przejeździe PKP PLK (numer, położenie, kategoria są prawdziwe), ale zdarzenia tego przejazdu nie dotyczą — w karcie widać obie etykiety. Realne są wyłącznie: położenie, numer i kategoria przejazdów PKP PLK oraz średni dobowy ruch roczny z GPR 2025.
 
 ## Co aplikacja robi, a czego nie
 
@@ -41,6 +41,7 @@ pnpm exec tsx scripts/fetch-crossings.ts               # nowe pobranie z WFS (sn
 pnpm exec tsx scripts/fetch-crossings.ts --bbox=14,49,24.2,55   # ograniczenie zasięgu (WGS84, filtr lokalny)
 pnpm exec tsx scripts/parse-gpr.ts                     # nowe pobranie GPR 2025 (ZIP do data/raw/)
 pnpm exec tsx scripts/match-gpr.ts                     # dopasowanie przejazd ↔ odcinek GPR
+pnpm exec tsx scripts/assign-cases.ts                  # osadzenie X1–X10 na realnych przejazdach
 ```
 
 Skrypty kończą się czytelnym błędem, gdy usługa jest niedostępna; wtedy wystarczy `build-dataset.ts` ze snapshotów.
@@ -95,7 +96,7 @@ Kod aplikacji: licencja MIT ([`LICENSE`](LICENSE)).
 
 ## Świadome decyzje projektowe
 
-- **Przypadki fikcyjne nie są przypięte do realnych przejazdów.** Mają umowne położenie i nazwy „Przejazd X1”… Przypisanie fikcyjnych naruszeń do realnego, identyfikowalnego przejazdu mogłoby wprowadzać w błąd.
+- **Przypadki fikcyjne osadzone na realnych przejazdach według stałej reguły** (`scripts/assign-cases.ts`): ta sama kategoria co wzorzec, rozłożenie na jednostki PLK, brak dopasowania GPR (fikcyjny ruch nie przeczy danym realnym), najniższy numer obiektu WFS. Karta i mapa pokazują, że przejazd jest realny, a zdarzenia fikcyjne.
 - **Kolejność osi EPSG:2180** wynika z deklaracji CRS (`urn:ogc:def:crs:EPSG::2180` → northing, easting), a nie z testu bboxa: zamienione osie typowego punktu też trafiają w obszar Polski. Dodatkowa kontrola regionalna (PLK Lublin na wschodzie, PLK Szczecin na zachodzie).
 - **GPR 2025 obejmuje tylko drogi krajowe**, a odcinki są uproszczone (zwykle 2 wierzchołki). Dlatego oprócz progu 25 m („pewne”) jest pasmo 25–100 m („przybliżone”), które podnosi priorytet weryfikacji danych. Autostrady i drogi ekspresowe są pomijane (§39 ust. 1 pkt 1 — skrzyżowania bezkolizyjne).
 - **Progi iloczynu ruchu przypisane do kategorii wg tekstu rozporządzenia:** ≥ 150 000 → kategoria B (§8 ust. 1); 60 000–150 000 → C (§9 pkt 1); D wymaga < 60 000 (§10 pkt 1). Dodano regułę aktualności pomiaru ruchu z zał. nr 1.

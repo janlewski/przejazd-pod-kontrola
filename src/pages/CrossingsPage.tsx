@@ -56,7 +56,7 @@ function applyFilters(rows: Row[], f: Filters): Row[] {
     if (f.verification !== 'all' && r.assessment.verification.level !== f.verification) return false
     if (f.gpr === 'matched' && r.gpr === null) return false
     if (f.gpr === 'unmatched' && (r.gpr !== null || r.origin !== 'real')) return false
-    if (q && !normalize(`${r.name} ${r.id} ${r.unit ?? ''}`).includes(q)) return false
+    if (q && !normalize(`${r.name} ${r.id} ${r.crossingName ?? ''} ${r.unit ?? ''}`).includes(q)) return false
     return true
   })
 }
@@ -227,8 +227,9 @@ export default function CrossingsPage() {
       </form>
 
       <FictionalDataBanner>
-        X1–X10 (romby na mapie, szare wiersze) mają umowne położenie. Realne przejazdy nie mają w zbiorze
-        danych o kontrolach, stąd „brak oceny”.
+        X1–X10 (romby, szare wiersze) to zmyślone zdarzenia na realnych przejazdach: numer, położenie i
+        kategoria są prawdziwe, objawy i naruszenia nie. Pozostałe przejazdy nie mają danych o kontrolach,
+        stąd „brak oceny”.
       </FictionalDataBanner>
 
       <div className="grid gap-3 lg:h-[max(560px,calc(100svh-19.5rem))] lg:grid-cols-[minmax(0,13fr)_minmax(0,11fr)] 2xl:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">

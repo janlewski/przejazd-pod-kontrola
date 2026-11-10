@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { Link, useParams } from 'react-router'
+import { Link, Navigate, useParams } from 'react-router'
 import { FictionalDataBanner } from '@/components/common/FictionalDataBanner'
 import { KmPlate } from '@/components/common/KmPlate'
 import { Separator } from '@/components/ui/separator'
@@ -11,7 +11,7 @@ import { AssessmentPanels } from '@/components/diagnosis/AssessmentPanels'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { caseById, caseRows, sourceById } from '@/data'
+import { caseByCrossingId, caseById, caseRows, sourceById } from '@/data'
 import { symptoms } from '@/data/rules/symptoms'
 import type { Row } from '@/domain/assess'
 import { diagnose } from '@/domain/diagnose'
@@ -38,6 +38,8 @@ export default function CrossingDetailPage() {
     const row = caseRows.find((r) => r.id === id)!
     return <Detail row={row} record={fictional} />
   }
+  const linkedCase = caseByCrossingId(id)
+  if (linkedCase) return <Navigate to={`/przejazdy/${linkedCase.id}`} replace />
   if (real.status === 'loading')
     return <p className="text-sm text-muted-foreground">Wczytywanie danych przejazdu…</p>
   if (real.status === 'error')
@@ -64,7 +66,7 @@ export default function CrossingDetailPage() {
 
 function Detail({ row, record }: { row: Row; record: FictionalCase | null }) {
   const isFictional = record !== null
-  const parsed = !isFictional ? parseCrossingNumber(row.name) : null
+  const parsed = row.crossingName ? parseCrossingNumber(row.crossingName) : null
   const diagnosis = record ? diagnose(record) : null
 
   return (
@@ -75,7 +77,14 @@ function Detail({ row, record }: { row: Row; record: FictionalCase | null }) {
         description={isFictional ? record.summary : (row.unit ?? undefined)}
         meta={
           <>
-            {parsed ? <KmPlate name={row.name} /> : null}
+            {parsed && row.crossingName ? <KmPlate name={row.crossingName} /> : null}
+            {isFictional ? (
+              <>
+                <span className="text-xs text-muted-foreground">przejazd</span>
+                <OriginBadge origin="real" />
+                <span className="text-xs text-muted-foreground">zdarzenia</span>
+              </>
+            ) : null}
             <OriginBadge origin={row.origin} />
             <Separator orientation="vertical" className="h-4!" />
             <CategoryBadge category={row.category} />
@@ -93,7 +102,13 @@ function Detail({ row, record }: { row: Row; record: FictionalCase | null }) {
           </Link>
         }
       />
-      {isFictional ? <FictionalDataBanner /> : null}
+      {isFictional ? (
+        <FictionalDataBanner>
+          Numer <span className="font-mono">{record.crossing.name}</span>, położenie i kategoria tego
+          przejazdu są realne (WFS GUGiK / PKP PLK). Objawy, kontrole, naruszenia, ruch drogowy i pociągi są
+          zmyślone — nie opisują tego przejazdu.
+        </FictionalDataBanner>
+      ) : null}
 
       <Tabs defaultValue="priorytet" className="gap-3">
         <TabsList variant="line" className="w-full justify-start border-b">
@@ -249,42 +264,50 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
   )
 }
 
-function RealData({ row }: { row: Row }) {
+type CrossingInfo = Pick<Row, 'id' | 'category' | 'unit' | 'lat' | 'lon'> & { name: string }
+
+function RealCrossingSection({ crossing }: { crossing: CrossingInfo }) {
   const wfs = sourceById('gugik-wfs-przejazdy')
-  const parsed = parseCrossingNumber(row.name)
+  const parsed = parseCrossingNumber(crossing.name)
+  return (
+    <section className="flex flex-col gap-2 rounded-sm border bg-card p-3">
+      <h2 className="text-sm font-semibold">Przejazd — WFS GUGiK / PKP PLK</h2>
+      <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
+        <Field label="Numer identyfikacyjny (NAZWA)">
+          <span className="font-mono">{crossing.name}</span>
+        </Field>
+        <Field label="Linia i kilometr">
+          {parsed ? `linia ${parsed.line}, km ${parsed.km}` : 'brak'}{' '}
+          <SourceFootnote sourceId="gov-112-przejazdy" />
+        </Field>
+        <Field label="Identyfikator obiektu">
+          <span className="font-mono">{crossing.id}</span>
+        </Field>
+        <Field label="Kategoria">{crossing.category ?? 'brak danych'}</Field>
+        <Field label="Jednostka (IDDE)">{crossing.unit ?? 'brak danych'}</Field>
+        <Field label="Współrzędne (WGS84)">
+          <span className="font-mono tabular-nums">
+            {formatCoord(crossing.lat)}, {formatCoord(crossing.lon)}
+          </span>{' '}
+          <a
+            href={`https://www.openstreetmap.org/?mlat=${crossing.lat}&mlon=${crossing.lon}#map=17/${crossing.lat}/${crossing.lon}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            OpenStreetMap
+          </a>
+        </Field>
+        <Field label="Stan danych">{wfs ? formatDate(wfs.retrievedAt) : 'brak'}</Field>
+      </dl>
+      <SourceFootnote sourceId="gugik-wfs-przejazdy" />
+    </section>
+  )
+}
+
+function RealData({ row }: { row: Row }) {
   return (
     <div className="grid gap-3 lg:grid-cols-2">
-      <section className="flex flex-col gap-2 rounded-sm border bg-card p-3">
-        <h2 className="text-sm font-semibold">Przejazd — WFS GUGiK / PKP PLK</h2>
-        <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
-          <Field label="Numer identyfikacyjny (NAZWA)">
-            <span className="font-mono">{row.name}</span>
-          </Field>
-          <Field label="Linia i kilometr">
-            {parsed ? `linia ${parsed.line}, km ${parsed.km}` : 'brak'}{' '}
-            <SourceFootnote sourceId="gov-112-przejazdy" />
-          </Field>
-          <Field label="Identyfikator obiektu">
-            <span className="font-mono">{row.id}</span>
-          </Field>
-          <Field label="Kategoria">{row.category ?? 'brak danych'}</Field>
-          <Field label="Jednostka (IDDE)">{row.unit ?? 'brak danych'}</Field>
-          <Field label="Współrzędne (WGS84)">
-            <span className="font-mono tabular-nums">
-              {formatCoord(row.lat)}, {formatCoord(row.lon)}
-            </span>{' '}
-            <a
-              href={`https://www.openstreetmap.org/?mlat=${row.lat}&mlon=${row.lon}#map=17/${row.lat}/${row.lon}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              OpenStreetMap
-            </a>
-          </Field>
-          <Field label="Stan danych">{wfs ? formatDate(wfs.retrievedAt) : 'brak'}</Field>
-        </dl>
-        <SourceFootnote sourceId="gugik-wfs-przejazdy" />
-      </section>
+      <RealCrossingSection crossing={row} />
       <section className="flex flex-col gap-2 rounded-sm border bg-card p-3">
         <h2 className="text-sm font-semibold">Ruch drogowy — GPR 2025 (GDDKiA)</h2>
         {row.gpr ? (
@@ -322,12 +345,15 @@ function RealData({ row }: { row: Row }) {
 function FictionalData({ record }: { record: FictionalCase }) {
   return (
     <div className="grid gap-3 lg:grid-cols-2">
+      <RealCrossingSection crossing={{ ...record.crossing, category: record.category }} />
       <section className="fictional-stamp flex flex-col gap-2 rounded-sm bg-card p-3 pt-4">
         <h2 className="text-sm font-semibold">Dane przypadku (fikcyjne)</h2>
         <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
-          <Field label="Pochodzenie">DANE FIKCYJNE — origin: fictional</Field>
-          <Field label="Położenie">umowne, nie wskazuje rzeczywistego przejazdu</Field>
-          <Field label="Kategoria">{record.category ?? 'brak danych'}</Field>
+          <Field label="Pochodzenie">DANE FIKCYJNE — zmyślone na potrzeby demonstracji</Field>
+          <Field label="Przejazd">
+            realny (<span className="font-mono">{record.crossing.name}</span>), ale nie dotyczą go te
+            zdarzenia
+          </Field>
           <Field label="Ostatnia kontrola">
             {record.lastInspectionAt ? formatDate(record.lastInspectionAt) : 'brak danych'}
           </Field>
@@ -342,7 +368,7 @@ function FictionalData({ record }: { record: FictionalCase }) {
           </Field>
         </dl>
       </section>
-      <section className="fictional-stamp flex flex-col gap-2 rounded-sm bg-card p-3 pt-4">
+      <section className="fictional-stamp flex flex-col gap-2 rounded-sm bg-card p-3 pt-4 lg:col-span-2">
         <h2 className="text-sm font-semibold">Naruszenia (fikcyjne)</h2>
         {record.violations.length === 0 ? (
           <p className="text-sm text-muted-foreground">Brak zarejestrowanych pomiarów naruszeń.</p>

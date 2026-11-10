@@ -29,8 +29,10 @@ function popupHtml(row: Row): string {
         : 'brak danych o ruchu'
   return [
     `<div class="flex flex-col gap-1 text-xs">`,
-    fictional ? `<strong class="font-mono tracking-wider">DANE FIKCYJNE · położenie umowne</strong>` : '',
-    `<strong class="text-sm">${escapeHtml(row.name)}</strong>`,
+    fictional ? `<strong class="tracking-wide">DANE FIKCYJNE na realnym przejeździe</strong>` : '',
+    `<strong class="text-sm">${escapeHtml(row.name)}${
+      fictional && row.crossingName ? ` · <span class="font-mono">${escapeHtml(row.crossingName)}</span>` : ''
+    }</strong>`,
     `<span>Kategoria ${row.category ?? '?'} · ${escapeHtml(level)} · ${row.assessment.verification.level}</span>`,
     `<span>${escapeHtml(aadt)}</span>`,
     `<a href="#/przejazdy/${encodeURIComponent(row.id)}">Otwórz kartę przejazdu</a>`,
@@ -129,7 +131,7 @@ export function CrossingMap({
       if (row.origin === 'fictional') {
         const marker = L.marker([row.lat, row.lon], {
           icon: fictionalIcon(row),
-          title: `${row.name} — DANE FIKCYJNE, położenie umowne`,
+          title: `${row.name} — DANE FIKCYJNE na realnym przejeździe ${row.crossingName ?? ''}`,
           keyboard: true,
           zIndexOffset: 1000,
         })
