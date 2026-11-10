@@ -1,13 +1,4 @@
-import {
-  ArrowDown,
-  ArrowRight,
-  ChartColumn,
-  Check,
-  Crosshair,
-  Minus,
-  Stethoscope,
-  Wrench,
-} from 'lucide-react'
+import { ArrowRight, ChartColumn, Check, Crosshair, Minus, Stethoscope, Wrench } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { Link } from 'react-router'
 import { BrandMark } from '@/components/common/BrandMark'
@@ -24,7 +15,7 @@ const STEPS = [
   {
     icon: Crosshair,
     name: 'Wskaż',
-    text: 'Lista i mapa pokazują, które przejazdy skontrolować najpierw — z powodem każdej oceny.',
+    text: 'Lista i mapa pokazują, które przejazdy skontrolować najpierw, z powodem każdej oceny.',
     to: '/przejazdy',
   },
   {
@@ -54,7 +45,7 @@ const IS = [
 ]
 
 const IS_NOT = [
-  'Jeden „wskaźnik niebezpieczeństwa” — celowo go nie liczymy.',
+  'Jeden „wskaźnik niebezpieczeństwa”. Celowo go nie liczymy.',
   'Prognoza wypadków ani obietnica, że będzie ich mniej.',
   'System decyzyjny: decyzja należy do zarządcy kolei i zarządcy drogi.',
 ]
@@ -62,7 +53,7 @@ const IS_NOT = [
 const DATA_SOURCES = [
   { id: 'gugik-wfs-przejazdy', what: 'położenie, numer i kategoria przejazdów PKP PLK' },
   { id: 'gddkia-gpr-2025', what: 'średni dobowy ruch roczny na drogach krajowych' },
-  { id: 'pkbwk-raport-2024', what: 'przyczyny zdarzeń — punkt wyjścia do wzorców' },
+  { id: 'pkbwk-raport-2024', what: 'przyczyny zdarzeń, punkt wyjścia do wzorców' },
   { id: 'utk-raport-2025', what: 'zdarzenia i incydenty na przejazdach 2021–2025' },
   { id: 'osm-tiles', what: 'podkład mapy' },
 ]
@@ -89,8 +80,8 @@ export default function LandingPage() {
           <div className="flex items-center gap-3">
             <BrandMark size={28} inverted />
             <p className="text-sm">
-              Prototyp konkursowy · {PROJECT.contest}{' '}
-              <span className="text-muted-foreground">· {PROJECT.contestOrganizer}</span>
+              Prototyp na konkurs {PROJECT.contest}{' '}
+              <span className="text-muted-foreground">({PROJECT.contestOrganizer})</span>
             </p>
           </div>
           <a href={PROJECT.repoUrl} target="_blank" rel="noreferrer" className="text-sm">
@@ -118,15 +109,15 @@ export default function LandingPage() {
                 W latach {UTK.years} doszło do{' '}
                 <strong className="font-semibold tabular-nums">{formatInt(UTK.total)}</strong> incydentów z
                 winy użytkowników przejazdów i przejść.{' '}
-                <strong className="font-semibold tabular-nums">{formatInt(UTK.categoryB)}</strong> z nich —
-                ponad 90% — na przejazdach kategorii B, wyposażonych w półrogatki i sygnalizację.
+                <strong className="font-semibold tabular-nums">{formatInt(UTK.categoryB)}</strong> z nich,
+                czyli ponad 90%, na przejazdach kategorii B, wyposażonych w półrogatki i sygnalizację.
               </p>
               <p className="text-sm text-muted-foreground">
                 Źródło:{' '}
                 <a href={utk?.url} target="_blank" rel="noreferrer">
                   UTK, Raport w sprawie bezpieczeństwa za 2025
                 </a>
-                , s. {UTK.page} — incydenty kategorii {UTK.incidentCategories}.
+                , s. {UTK.page}, incydenty kategorii {UTK.incidentCategories}.
               </p>
               <p className="leading-relaxed">
                 Takie zdarzenia układają się w powtarzalne wzorce. Aplikacja pomaga wskazać przejazdy do
@@ -145,7 +136,6 @@ export default function LandingPage() {
                 </Button>
                 <Button variant="link" className="px-0 text-base" onClick={showHow}>
                   Jak to działa
-                  <ArrowDown aria-hidden />
                 </Button>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -160,11 +150,11 @@ export default function LandingPage() {
               <CrossingSchematic />
             </div>
             <figcaption className="flex flex-col gap-1 text-sm">
-              <span className="font-medium">Przejazd kategorii B — schemat, widok z góry</span>
+              <span className="font-medium">Przejazd kategorii B: schemat, widok z góry</span>
               <ol className="flex flex-col gap-1 text-muted-foreground">
-                <li>1 — sygnalizator świetlny i dźwiękowy;</li>
-                <li>2 — półrogatka zamyka tylko pas wjazdowy;</li>
-                <li>3 — incydent C66: niezatrzymanie się przed zamkniętą półrogatką i jej uszkodzenie.</li>
+                <li>1. Sygnalizator świetlny i dźwiękowy.</li>
+                <li>2. Półrogatka zamyka tylko pas wjazdowy.</li>
+                <li>3. Incydent C66: niezatrzymanie się przed zamkniętą półrogatką i jej uszkodzenie.</li>
               </ol>
             </figcaption>
           </figure>
@@ -177,7 +167,7 @@ export default function LandingPage() {
                 id="jak-to-dziala"
                 ref={howRef}
                 tabIndex={-1}
-                className="scroll-mt-6 text-2xl font-semibold tracking-tight outline-none"
+                className="scroll-mt-6 text-2xl font-semibold tracking-tight"
               >
                 Jak to działa
               </h2>
@@ -237,7 +227,7 @@ export default function LandingPage() {
                 Dane i przejrzystość
               </h2>
               <FictionalDataBanner>
-                Przypadki X1–X10 — objawy, kontrole, naruszenia, ruch i liczba pociągów — są zmyślone, żeby
+                Objawy, kontrole, naruszenia, ruch i liczba pociągów w przypadkach X1–X10 są zmyślone, żeby
                 pokazać działanie aplikacji. Każdy osadzono na realnym przejeździe wybranym według stałej
                 reguły: numer, położenie i kategoria są prawdziwe, zdarzenia nie dotyczą tych przejazdów.
               </FictionalDataBanner>

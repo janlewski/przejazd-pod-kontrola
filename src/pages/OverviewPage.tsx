@@ -2,7 +2,7 @@ import { Link } from 'react-router'
 import { PageHeader } from '@/components/common/PageHeader'
 import { SourceFootnote } from '@/components/common/SourceFootnote'
 import { OriginBadge } from '@/components/common/badges'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card'
 import { caseRows, sourceById } from '@/data'
 import { formatInt } from '@/lib/format'
 import { cn } from '@/lib/utils'
@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
 const STEPS = [
   {
     name: 'Wskazanie',
-    text: 'Które przejazdy skontrolować najpierw — z jawną listą powodów.',
+    text: 'Które przejazdy skontrolować najpierw, z jawną listą powodów.',
     to: '/przejazdy',
   },
   { name: 'Diagnoza', text: 'Powtarzalny wzorzec: objaw → przyczyna.', to: '/przejazdy/X1' },
@@ -20,7 +20,7 @@ const STEPS = [
     to: '/srodki',
   },
   { name: 'Wdrożenie', text: 'Zaplanowane, w realizacji, wdrożone, zweryfikowane.', to: '/wdrozenia' },
-  { name: 'Ocena', text: 'Naruszenia przed i po — zawsze z zastrzeżeniami.', to: '/ocena' },
+  { name: 'Ocena', text: 'Naruszenia przed i po, zawsze z zastrzeżeniami.', to: '/ocena' },
 ]
 
 const OUTPUTS = [
@@ -35,7 +35,7 @@ const OUTPUTS = [
     text: 'Czego brakuje, aby reguły działały: kategoria, kontrole, ruch drogowy, pociągi na dobę.',
   },
   {
-    code: '60 000 · 150 000',
+    code: 'progi 60 000 i 150 000',
     title: 'Kontekst ekspozycji',
     text: 'Iloczyn ruchu porównany z progami Dz.U. 2025 poz. 1105. Kontekst regulacyjny, nie miara ryzyka.',
   },
@@ -103,7 +103,6 @@ export default function OverviewPage() {
   return (
     <>
       <PageHeader
-        station="01"
         title="Przegląd"
         description="Od wskazania przejazdu do sprawdzenia efektu: wskazanie, diagnoza, dobór środka, śledzenie wdrożenia i ocena przed/po."
       />
@@ -116,18 +115,18 @@ export default function OverviewPage() {
           <BoardCell
             label="Przejazdy w zbiorze"
             value={crossingsSource?.records !== undefined ? formatInt(crossingsSource.records) : '—'}
-            note="dane realne · WFS GUGiK / PKP PLK"
+            note="dane realne, WFS GUGiK / PKP PLK"
           />
           <BoardCell
-            label="Przypadki P1 — kontrola najpierw"
+            label="Przypadki P1: kontrola w pierwszej kolejności"
             value={`${p1}/${caseRows.length}`}
-            note="dane fikcyjne · X1–X10"
+            note="dane fikcyjne, X1–X10"
             fictional
           />
           <BoardCell
-            label="Przypadki V1 — najpierw dane"
+            label="Przypadki V1: najpierw uzupełnić dane"
             value={`${v1}/${caseRows.length}`}
-            note="dane fikcyjne · X1–X10"
+            note="dane fikcyjne, X1–X10"
             fictional
           />
         </div>
@@ -144,21 +143,20 @@ export default function OverviewPage() {
         <h2 id="wyniki" className="text-base font-semibold">
           Trzy osobne wyniki zamiast jednego wskaźnika
         </h2>
-        <div className="grid gap-3 md:grid-cols-3">
+        <dl className="divide-y rounded-sm border bg-card">
           {OUTPUTS.map((o) => (
-            <Card key={o.title} className="gap-2 border-t-4 border-t-foreground py-4">
-              <CardHeader className="px-4">
-                <CardTitle className="flex flex-wrap items-baseline justify-between gap-2">
-                  {o.title}
-                  <span className="font-mono text-xs font-normal text-muted-foreground tabular-nums">
-                    {o.code}
-                  </span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="px-4 text-sm text-muted-foreground">{o.text}</CardContent>
-            </Card>
+            <div
+              key={o.title}
+              className="grid gap-1 px-4 py-3 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-6"
+            >
+              <dt className="flex flex-wrap items-baseline gap-x-2">
+                <span className="font-semibold">{o.title}</span>
+                <span className="font-mono text-xs text-muted-foreground tabular-nums">{o.code}</span>
+              </dt>
+              <dd className="text-sm text-muted-foreground">{o.text}</dd>
+            </div>
           ))}
-        </div>
+        </dl>
       </section>
 
       <section aria-labelledby="dane" className="flex flex-col gap-3">
@@ -170,7 +168,7 @@ export default function OverviewPage() {
             <CardHeader className="px-4">
               <OriginBadge origin="real" />
               <CardDescription>
-                <SourceFootnote sourceId="gugik-wfs-przejazdy" /> ·{' '}
+                <SourceFootnote sourceId="gugik-wfs-przejazdy" />.{' '}
                 <SourceFootnote sourceId="gddkia-gpr-2025" />
               </CardDescription>
             </CardHeader>
@@ -182,13 +180,13 @@ export default function OverviewPage() {
                   przejazdów PKP PLK.
                 </li>
                 <li>
-                  Średni dobowy ruch roczny (SDRR) z GPR 2025 — tylko drogi krajowe; dopasowanie do{' '}
+                  Średni dobowy ruch roczny (SDRR) z GPR 2025, tylko drogi krajowe. Dopasowanie do{' '}
                   {gprMatch?.records !== undefined ? formatInt(gprMatch.records) : ''} przejazdów.
                 </li>
               </ul>
             </CardContent>
           </Card>
-          <Card className="fictional-stamp gap-3 border-dashed border-foreground py-4">
+          <Card className="gap-3 border-dashed border-foreground py-4">
             <CardHeader className="px-4">
               <OriginBadge origin="fictional" />
               <CardDescription>Przykład działania, nie opis rzeczywistych przejazdów.</CardDescription>

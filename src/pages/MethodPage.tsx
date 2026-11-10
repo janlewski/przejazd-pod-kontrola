@@ -32,7 +32,6 @@ export default function MethodPage() {
   return (
     <>
       <PageHeader
-        station="06"
         title="Metoda i źródła"
         description="Jak liczone są wyniki, czego aplikacja nie robi, skąd pochodzą dane i jakie są ograniczenia. Reguły są jawne i wymagają walidacji z ekspertami w pilotażu."
       />

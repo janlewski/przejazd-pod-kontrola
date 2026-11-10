@@ -3,16 +3,16 @@ import { Link, NavLink, Outlet, useLocation } from 'react-router'
 import { BrandMark } from '@/components/common/BrandMark'
 import { Toaster } from '@/components/ui/sonner'
 import { sourceById } from '@/data'
-import { formatDate, formatInt } from '@/lib/format'
+import { formatDate } from '@/lib/format'
 import { cn } from '@/lib/utils'
 
 const STATIONS = [
-  { to: '/przeglad', code: '01', label: 'Przegląd', hint: 'cykl i liczby', end: true },
-  { to: '/przejazdy', code: '02', label: 'Przejazdy', hint: 'wskazanie', end: false },
-  { to: '/srodki', code: '03', label: 'Środki zaradcze', hint: 'katalog', end: false },
-  { to: '/wdrozenia', code: '04', label: 'Wdrożenia', hint: 'śledzenie', end: false },
-  { to: '/ocena', code: '05', label: 'Ocena przed/po', hint: 'efekt', end: false },
-  { to: '/metoda', code: '06', label: 'Metoda i źródła', hint: 'jawne reguły', end: false },
+  { to: '/przeglad', label: 'Przegląd', end: true },
+  { to: '/przejazdy', label: 'Przejazdy', end: false },
+  { to: '/srodki', label: 'Środki zaradcze', end: false },
+  { to: '/wdrozenia', label: 'Wdrożenia', end: false },
+  { to: '/ocena', label: 'Ocena przed/po', end: false },
+  { to: '/metoda', label: 'Metoda i źródła', end: false },
 ] as const
 
 function LineNav() {
@@ -30,7 +30,7 @@ function LineNav() {
               end={s.end}
               className={({ isActive }) =>
                 cn(
-                  'group flex items-center gap-3 rounded-sm px-1 py-2 no-underline md:py-2.5',
+                  'group flex items-center gap-3 rounded-sm px-1 py-2 no-underline md:py-3',
                   isActive ? 'text-white' : 'text-sidebar-foreground hover:text-white',
                 )
               }
@@ -48,12 +48,7 @@ function LineNav() {
                   >
                     {isActive ? <span className="size-[7px] rounded-full bg-sidebar" /> : null}
                   </span>
-                  <span className="flex min-w-0 flex-col leading-tight">
-                    <span className={cn('text-sm', isActive && 'font-semibold')}>{s.label}</span>
-                    <span aria-hidden className="hidden text-[11px] text-sidebar-foreground/70 md:block">
-                      <span className="font-mono">{s.code}</span> · {s.hint}
-                    </span>
-                  </span>
+                  <span className={cn('text-sm leading-tight', isActive && 'font-semibold')}>{s.label}</span>
                 </>
               )}
             </NavLink>
@@ -70,7 +65,9 @@ export function AppShell() {
   const wfs = sourceById('gugik-wfs-przejazdy')
 
   useEffect(() => {
-    mainRef.current?.focus({ preventScroll: true })
+    // Move focus to the new page's heading so screen readers announce the page.
+    const heading = mainRef.current?.querySelector<HTMLElement>('h1[tabindex="-1"]')
+    ;(heading ?? mainRef.current)?.focus({ preventScroll: true })
     window.scrollTo(0, 0)
   }, [location.pathname])
 
@@ -99,7 +96,7 @@ export function AppShell() {
             <LineNav />
             <dl className="mt-auto hidden grid-cols-[auto_1fr] gap-x-2 gap-y-1 border-t border-sidebar-border pt-3 font-mono text-[11px] md:grid">
               <dt className="text-sidebar-foreground/70">Realne</dt>
-              <dd>PKP PLK · GDDKiA</dd>
+              <dd>PKP PLK, GDDKiA</dd>
               <dt className="text-sidebar-foreground/70">Fikcyjne</dt>
               <dd>X1–X10</dd>
               <dt className="text-sidebar-foreground/70">Stan</dt>
@@ -109,21 +106,11 @@ export function AppShell() {
         </aside>
 
         <div className="flex min-w-0 flex-col">
-          <header className="flex items-center justify-between gap-3 border-b bg-card px-4 py-1.5">
-            <span className="text-xs text-muted-foreground">
-              {wfs?.records !== undefined ? `${formatInt(wfs.records)} przejazdów · ` : ''}trzy wyniki, bez
-              jednego wskaźnika
-            </span>
-            <span className="rounded-sm bg-foreground px-1.5 py-0.5 text-xs font-medium text-background">
-              Demo — wersja konkursowa
-            </span>
-          </header>
-
           <main
             id="tresc"
             ref={mainRef}
             tabIndex={-1}
-            className="flex w-full max-w-[1600px] flex-1 flex-col gap-5 p-5 outline-none"
+            className="flex w-full max-w-[1600px] flex-1 flex-col gap-5 p-5"
           >
             <Outlet />
           </main>

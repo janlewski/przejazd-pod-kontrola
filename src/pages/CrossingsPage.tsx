@@ -126,9 +126,8 @@ export default function CrossingsPage() {
   return (
     <>
       <PageHeader
-        station="02"
         title="Przejazdy"
-        description="Mapa i lista realnych przejazdów PKP PLK oraz przypadków fikcyjnych X1–X10. Priorytet kontroli, weryfikacja danych i ruch drogowy są osobnymi kolumnami — nie są sumowane."
+        description="Mapa i lista realnych przejazdów PKP PLK oraz przypadków fikcyjnych X1–X10. Priorytet kontroli, weryfikacja danych i ruch drogowy są osobnymi kolumnami i nie są sumowane."
       />
 
       {real.status === 'error' ? (
@@ -279,7 +278,7 @@ export default function CrossingsPage() {
       </div>
 
       <p className="text-xs text-muted-foreground">
-        <SourceFootnote sourceId="gugik-wfs-przejazdy" /> · <SourceFootnote sourceId="gddkia-gpr-2025" />
+        <SourceFootnote sourceId="gugik-wfs-przejazdy" />. <SourceFootnote sourceId="gddkia-gpr-2025" />.
       </p>
     </>
   )

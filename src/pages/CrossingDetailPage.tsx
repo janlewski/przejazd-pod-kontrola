@@ -72,7 +72,6 @@ function Detail({ row, record }: { row: Row; record: FictionalCase | null }) {
   return (
     <>
       <PageHeader
-        station="02"
         title={isFictional ? row.name : `Przejazd ${row.name}`}
         description={isFictional ? record.summary : (row.unit ?? undefined)}
         meta={
@@ -106,7 +105,7 @@ function Detail({ row, record }: { row: Row; record: FictionalCase | null }) {
         <FictionalDataBanner>
           Numer <span className="font-mono">{record.crossing.name}</span>, położenie i kategoria tego
           przejazdu są realne (WFS GUGiK / PKP PLK). Objawy, kontrole, naruszenia, ruch drogowy i pociągi są
-          zmyślone — nie opisują tego przejazdu.
+          zmyślone i nie opisują tego przejazdu.
         </FictionalDataBanner>
       ) : null}
 
@@ -271,7 +270,7 @@ function RealCrossingSection({ crossing }: { crossing: CrossingInfo }) {
   const parsed = parseCrossingNumber(crossing.name)
   return (
     <section className="flex flex-col gap-2 rounded-sm border bg-card p-3">
-      <h2 className="text-sm font-semibold">Przejazd — WFS GUGiK / PKP PLK</h2>
+      <h2 className="text-sm font-semibold">Przejazd (WFS GUGiK / PKP PLK)</h2>
       <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
         <Field label="Numer identyfikacyjny (NAZWA)">
           <span className="font-mono">{crossing.name}</span>
@@ -309,7 +308,7 @@ function RealData({ row }: { row: Row }) {
     <div className="grid gap-3 lg:grid-cols-2">
       <RealCrossingSection crossing={row} />
       <section className="flex flex-col gap-2 rounded-sm border bg-card p-3">
-        <h2 className="text-sm font-semibold">Ruch drogowy — GPR 2025 (GDDKiA)</h2>
+        <h2 className="text-sm font-semibold">Ruch drogowy (GPR 2025, GDDKiA)</h2>
         {row.gpr ? (
           <>
             <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
@@ -349,7 +348,7 @@ function FictionalData({ record }: { record: FictionalCase }) {
       <section className="fictional-stamp flex flex-col gap-2 rounded-sm bg-card p-3 pt-4">
         <h2 className="text-sm font-semibold">Dane przypadku (fikcyjne)</h2>
         <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
-          <Field label="Pochodzenie">DANE FIKCYJNE — zmyślone na potrzeby demonstracji</Field>
+          <Field label="Pochodzenie">DANE FIKCYJNE, zmyślone na potrzeby demonstracji</Field>
           <Field label="Przejazd">
             realny (<span className="font-mono">{record.crossing.name}</span>), ale nie dotyczą go te
             zdarzenia

@@ -68,7 +68,6 @@ export default function TrackingPage() {
   return (
     <>
       <PageHeader
-        station="04"
         title="Wdrożenia"
         description="Zadania wdrożenia środków: przejazd, środek, status, podmiot odpowiedzialny i notatka."
         actions={

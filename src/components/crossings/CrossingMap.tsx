@@ -33,7 +33,7 @@ function popupHtml(row: Row): string {
     `<strong class="text-sm">${escapeHtml(row.name)}${
       fictional && row.crossingName ? ` · <span class="font-mono">${escapeHtml(row.crossingName)}</span>` : ''
     }</strong>`,
-    `<span>Kategoria ${row.category ?? '?'} · ${escapeHtml(level)} · ${row.assessment.verification.level}</span>`,
+    `<span>Kategoria ${row.category ?? '?'}, kontrola: ${escapeHtml(level)}, dane: ${row.assessment.verification.level}</span>`,
     `<span>${escapeHtml(aadt)}</span>`,
     `<a href="#/przejazdy/${encodeURIComponent(row.id)}">Otwórz kartę przejazdu</a>`,
     `</div>`,
@@ -131,7 +131,7 @@ export function CrossingMap({
       if (row.origin === 'fictional') {
         const marker = L.marker([row.lat, row.lon], {
           icon: fictionalIcon(row),
-          title: `${row.name} — DANE FIKCYJNE na realnym przejeździe ${row.crossingName ?? ''}`,
+          title: `${row.name}: DANE FIKCYJNE na realnym przejeździe ${row.crossingName ?? ''}`,
           keyboard: true,
           zIndexOffset: 1000,
         })
