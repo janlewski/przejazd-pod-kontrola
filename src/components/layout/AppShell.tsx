@@ -1,35 +1,19 @@
 import { useEffect, useRef } from 'react'
-import { NavLink, Outlet, useLocation } from 'react-router'
+import { Link, NavLink, Outlet, useLocation } from 'react-router'
+import { BrandMark } from '@/components/common/BrandMark'
 import { Toaster } from '@/components/ui/sonner'
 import { sourceById } from '@/data'
 import { formatDate, formatInt } from '@/lib/format'
 import { cn } from '@/lib/utils'
 
 const STATIONS = [
-  { to: '/', code: '01', label: 'Przegląd', hint: 'cykl i liczby', end: true },
+  { to: '/przeglad', code: '01', label: 'Przegląd', hint: 'cykl i liczby', end: true },
   { to: '/przejazdy', code: '02', label: 'Przejazdy', hint: 'wskazanie', end: false },
   { to: '/srodki', code: '03', label: 'Środki zaradcze', hint: 'katalog', end: false },
   { to: '/wdrozenia', code: '04', label: 'Wdrożenia', hint: 'śledzenie', end: false },
   { to: '/ocena', code: '05', label: 'Ocena przed/po', hint: 'efekt', end: false },
   { to: '/metoda', code: '06', label: 'Metoda i źródła', hint: 'jawne reguły', end: false },
 ] as const
-
-/** Crossing plate: a square sign with crossed bars (after the St Andrew's cross). */
-function BrandMark() {
-  return (
-    <svg width="36" height="36" viewBox="0 0 36 36" aria-hidden className="shrink-0">
-      <rect x="1" y="1" width="34" height="34" rx="3" fill="#FAFAF7" />
-      <g transform="rotate(45 18 18)">
-        <rect x="4" y="15" width="28" height="6" fill="#1F2328" />
-        <rect x="15" y="4" width="6" height="28" fill="#1F2328" />
-        <rect x="9" y="15" width="3" height="6" fill="#FAFAF7" />
-        <rect x="24" y="15" width="3" height="6" fill="#FAFAF7" />
-        <rect x="15" y="9" width="6" height="3" fill="#FAFAF7" />
-        <rect x="15" y="24" width="6" height="3" fill="#FAFAF7" />
-      </g>
-    </svg>
-  )
-}
 
 function LineNav() {
   return (
@@ -66,11 +50,8 @@ function LineNav() {
                   </span>
                   <span className="flex min-w-0 flex-col leading-tight">
                     <span className={cn('text-sm', isActive && 'font-semibold')}>{s.label}</span>
-                    <span
-                      aria-hidden
-                      className="hidden font-mono text-[10px] tracking-wider text-sidebar-foreground/70 uppercase md:block"
-                    >
-                      {s.code} · {s.hint}
+                    <span aria-hidden className="hidden text-[11px] text-sidebar-foreground/70 md:block">
+                      <span className="font-mono">{s.code}</span> · {s.hint}
                     </span>
                   </span>
                 </>
@@ -108,15 +89,13 @@ export function AppShell() {
       <div className="grid min-h-svh grid-cols-1 md:grid-cols-[15rem_1fr]">
         <aside className="bg-sidebar text-sidebar-foreground md:sticky md:top-0 md:h-svh">
           <div className="flex h-full flex-col gap-6 p-4">
-            <div className="flex items-center gap-3">
+            <Link to="/" className="flex items-center gap-3 no-underline">
               <BrandMark />
-              <div className="flex flex-col leading-tight">
+              <span className="flex flex-col leading-tight">
                 <span className="text-base font-semibold text-white">Przejazd pod kontrolą</span>
-                <span className="font-mono text-[10px] tracking-wider text-sidebar-foreground/75 uppercase">
-                  linia demonstracyjna
-                </span>
-              </div>
-            </div>
+                <span className="text-xs text-sidebar-foreground/75">prototyp konkursowy</span>
+              </span>
+            </Link>
             <LineNav />
             <dl className="mt-auto hidden grid-cols-[auto_1fr] gap-x-2 gap-y-1 border-t border-sidebar-border pt-3 font-mono text-[11px] md:grid">
               <dt className="text-sidebar-foreground/70">Realne</dt>
@@ -131,11 +110,11 @@ export function AppShell() {
 
         <div className="flex min-w-0 flex-col">
           <header className="flex items-center justify-between gap-3 border-b bg-card px-4 py-1.5">
-            <span className="font-mono text-[11px] tracking-wider text-muted-foreground uppercase">
+            <span className="text-xs text-muted-foreground">
               {wfs?.records !== undefined ? `${formatInt(wfs.records)} przejazdów · ` : ''}trzy wyniki, bez
               jednego wskaźnika
             </span>
-            <span className="rounded-sm bg-foreground px-1.5 py-0.5 font-mono text-[11px] tracking-wider text-background uppercase">
+            <span className="rounded-sm bg-foreground px-1.5 py-0.5 text-xs font-medium text-background">
               Demo — wersja konkursowa
             </span>
           </header>

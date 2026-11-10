@@ -2,7 +2,8 @@ import AxeBuilder from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
 
 const PAGES = [
-  { path: '#/', heading: 'Przegląd' },
+  { path: '#/', heading: 'Przejazd pod kontrolą' },
+  { path: '#/przeglad', heading: 'Przegląd' },
   { path: '#/przejazdy', heading: 'Przejazdy' },
   { path: '#/przejazdy/X1', heading: 'Przejazd X1' },
   { path: '#/srodki', heading: 'Środki zaradcze' },

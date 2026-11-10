@@ -1,10 +1,18 @@
 import { useDeferredValue, useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router'
+import { Link, useSearchParams } from 'react-router'
 import { FictionalDataBanner } from '@/components/common/FictionalDataBanner'
 import { FilterSelect } from '@/components/common/FilterSelect'
 import { PageHeader } from '@/components/common/PageHeader'
 import { SourceFootnote } from '@/components/common/SourceFootnote'
-import { PriorityShape } from '@/components/common/badges'
+import {
+  CategoryBadge,
+  OriginBadge,
+  PriorityBadge,
+  PriorityShape,
+  VerificationBadge,
+} from '@/components/common/badges'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { CrossingMap } from '@/components/crossings/CrossingMap'
 import { CATEGORY_COLOR, PRIORITY_COLOR, type ColorMode } from '@/components/crossings/mapColors'
 import { CrossingsTable } from '@/components/crossings/CrossingsTable'
@@ -12,7 +20,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Input } from '@/components/ui/input'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { Label } from '@/components/ui/label'
-import { caseRows } from '@/data'
+import { caseById, caseRows } from '@/data'
 import type { Row } from '@/domain/assess'
 import { useRealData } from '@/hooks/useRealData'
 import { formatInt } from '@/lib/format'
@@ -87,6 +95,16 @@ export default function CrossingsPage() {
   }
 
   const allRows = useMemo(() => [...caseRows, ...(real.data?.rows ?? [])], [real.data])
+  const selectedId = params.get('wybrany')
+  const selected = selectedId ? allRows.find((r) => r.id === selectedId) : undefined
+  const clearSelection = () =>
+    setParams(
+      (p) => {
+        p.delete('wybrany')
+        return p
+      },
+      { replace: true },
+    )
   const { origin, category, inspection, verification, gpr } = filters
   const filtered = useMemo(
     () => applyFilters(allRows, { q: deferredQuery, origin, category, inspection, verification, gpr }),
@@ -106,6 +124,8 @@ export default function CrossingsPage() {
         przejazdów zbiór nie zawiera danych o kontrolach i zdarzeniach, dlatego ich priorytet kontroli to
         „brak oceny”.
       </FictionalDataBanner>
+
+      {selected ? <SelectedRow row={selected} onClear={clearSelection} /> : null}
 
       {real.status === 'error' ? (
         <Alert variant="destructive">
@@ -232,17 +252,50 @@ export default function CrossingsPage() {
       </p>
 
       <div className="grid gap-4 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
-        <CrossingsTable rows={filtered} />
+        <CrossingsTable rows={filtered} selectedId={selectedId} />
         <div className="flex flex-col gap-2 xl:sticky xl:top-4 xl:self-start">
           <CrossingMap
             rows={filtered}
             colorMode={colorMode}
+            selectedId={selectedId}
             className="h-[420px] xl:h-[calc(100svh-12rem)]"
           />
           <MapLegend colorMode={colorMode} />
         </div>
       </div>
     </>
+  )
+}
+
+function SelectedRow({ row, onClear }: { row: Row; onClear: () => void }) {
+  const record = row.origin === 'fictional' ? caseById(row.id) : undefined
+  return (
+    <Card
+      role="region"
+      aria-label={`Wybrany przejazd: ${row.name}`}
+      className="flex-row flex-wrap items-center justify-between gap-4 border-2 border-foreground px-4 py-3"
+    >
+      <div className="flex min-w-0 flex-col gap-1.5">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="font-semibold">{row.name}</span>
+          <OriginBadge origin={row.origin} />
+          <CategoryBadge category={row.category} />
+          <PriorityBadge level={row.assessment.inspection.level} />
+          <VerificationBadge level={row.assessment.verification.level} />
+        </div>
+        <p className="text-sm text-muted-foreground">
+          {record?.summary ?? row.unit ?? 'Przejazd z danych WFS.'} Na mapie otwarty jest jego opis.
+        </p>
+      </div>
+      <div className="flex flex-wrap items-center gap-3">
+        <Button asChild size="sm" className="rounded-sm">
+          <Link to={`/przejazdy/${encodeURIComponent(row.id)}`}>Otwórz kartę przejazdu</Link>
+        </Button>
+        <Button variant="ghost" size="sm" onClick={onClear}>
+          Usuń zaznaczenie
+        </Button>
+      </div>
+    </Card>
   )
 }
 

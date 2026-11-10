@@ -59,9 +59,9 @@ function BoardCell({
         fictional && 'm-2 rounded-sm border border-dashed border-background/60',
       )}
     >
-      <span className="font-mono text-[11px] tracking-[0.12em] text-background/75 uppercase">{label}</span>
+      <span className="text-sm text-background/85">{label}</span>
       <span className="font-mono text-[2.75rem] leading-none font-semibold tabular-nums">{value}</span>
-      <span className="font-mono text-[11px] tracking-wide text-background/75 uppercase">{note}</span>
+      <span className="text-xs text-background/75">{note}</span>
     </div>
   )
 }
@@ -74,7 +74,7 @@ function CycleLine() {
         aria-hidden
         className="absolute top-[9px] right-[10%] left-[10%] hidden h-[3px] bg-foreground md:block"
       />
-      {STEPS.map((s, i) => (
+      {STEPS.map((s) => (
         <li key={s.name} className="relative flex gap-3 md:flex-col md:items-center md:px-3 md:text-center">
           <span
             aria-hidden
@@ -83,9 +83,6 @@ function CycleLine() {
             <span className="size-[7px] rounded-full bg-foreground" />
           </span>
           <span className="flex flex-col gap-0.5">
-            <span className="font-mono text-[11px] tracking-wider text-muted-foreground">
-              {String(i + 1).padStart(2, '0')}
-            </span>
             <Link to={s.to} className="text-base font-semibold">
               {s.name}
             </Link>
@@ -137,22 +134,26 @@ export default function OverviewPage() {
       </section>
 
       <section aria-labelledby="cykl" className="flex flex-col gap-4">
-        <h2 id="cykl" className="font-mono text-xs tracking-[0.12em] text-muted-foreground uppercase">
+        <h2 id="cykl" className="text-base font-semibold">
           Cykl pracy
         </h2>
         <CycleLine />
       </section>
 
       <section aria-labelledby="wyniki" className="flex flex-col gap-3">
-        <h2 id="wyniki" className="font-mono text-xs tracking-[0.12em] text-muted-foreground uppercase">
+        <h2 id="wyniki" className="text-base font-semibold">
           Trzy osobne wyniki zamiast jednego wskaźnika
         </h2>
         <div className="grid gap-3 md:grid-cols-3">
           {OUTPUTS.map((o) => (
             <Card key={o.title} className="gap-2 border-t-4 border-t-foreground py-4">
               <CardHeader className="px-4">
-                <span className="font-mono text-xs text-muted-foreground tabular-nums">{o.code}</span>
-                <CardTitle>{o.title}</CardTitle>
+                <CardTitle className="flex flex-wrap items-baseline justify-between gap-2">
+                  {o.title}
+                  <span className="font-mono text-xs font-normal text-muted-foreground tabular-nums">
+                    {o.code}
+                  </span>
+                </CardTitle>
               </CardHeader>
               <CardContent className="px-4 text-sm text-muted-foreground">{o.text}</CardContent>
             </Card>
@@ -161,7 +162,7 @@ export default function OverviewPage() {
       </section>
 
       <section aria-labelledby="dane" className="flex flex-col gap-3">
-        <h2 id="dane" className="font-mono text-xs tracking-[0.12em] text-muted-foreground uppercase">
+        <h2 id="dane" className="text-base font-semibold">
           Dane realne i fikcyjne
         </h2>
         <div className="grid gap-4 md:grid-cols-2">

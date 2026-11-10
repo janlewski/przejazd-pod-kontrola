@@ -121,7 +121,7 @@ const columns: ColumnDef<Row>[] = [
   },
 ]
 
-export function CrossingsTable({ rows }: { rows: Row[] }) {
+export function CrossingsTable({ rows, selectedId = null }: { rows: Row[]; selectedId?: string | null }) {
   const [sorting, setSorting] = useState<SortingState>([{ id: 'inspection', desc: false }])
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: PAGE_SIZE })
 
@@ -189,7 +189,15 @@ export function CrossingsTable({ rows }: { rows: Row[] }) {
               </TableRow>
             ) : (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} className={cn(row.original.origin === 'fictional' && 'bg-muted/60')}>
+                <TableRow
+                  key={row.id}
+                  aria-current={row.id === selectedId ? 'true' : undefined}
+                  data-state={row.id === selectedId ? 'selected' : undefined}
+                  className={cn(
+                    row.original.origin === 'fictional' && 'bg-muted/60',
+                    row.id === selectedId && 'outline-2 -outline-offset-2 outline-foreground',
+                  )}
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id} className="py-1.5 align-top">
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}

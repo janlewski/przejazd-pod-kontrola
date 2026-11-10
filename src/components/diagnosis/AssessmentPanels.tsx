@@ -9,12 +9,10 @@ import { formatInt, formatOrMissing } from '@/lib/format'
 import { INSPECTION_LABEL, NOT_ASSESSED_LABEL, VERIFICATION_LABEL } from '@/lib/labels'
 
 function Panel({
-  index,
   title,
   accent = 'border-t-foreground',
   children,
 }: {
-  index: string
   title: string
   accent?: string
   children: ReactNode
@@ -22,9 +20,6 @@ function Panel({
   return (
     <Card role="region" aria-label={title} className={cn('gap-3 border-t-4 py-3', accent)}>
       <CardHeader className="px-3">
-        <span className="font-mono text-[11px] tracking-wider text-muted-foreground uppercase">
-          Wynik {index} z 3
-        </span>
         <CardTitle className="text-base">
           <h2>{title}</h2>
         </CardTitle>
@@ -41,7 +36,6 @@ export function AssessmentPanels({ assessment, fictional }: { assessment: Assess
   return (
     <div className="grid gap-3 lg:grid-cols-3">
       <Panel
-        index="1"
         title="Priorytet kontroli"
         accent={inspection.level ? INSPECTION_ACCENT[inspection.level] : 'border-t-line-strong'}
       >
@@ -54,7 +48,7 @@ export function AssessmentPanels({ assessment, fictional }: { assessment: Assess
         <ReasonList reasons={inspection.reasons} />
       </Panel>
 
-      <Panel index="2" title="Priorytet weryfikacji danych">
+      <Panel title="Priorytet weryfikacji danych">
         <div className="flex items-center gap-2">
           <VerificationBadge level={verification.level} />
           <span className="text-sm">{VERIFICATION_LABEL[verification.level]}</span>
@@ -77,7 +71,7 @@ export function AssessmentPanels({ assessment, fictional }: { assessment: Assess
         <ReasonList reasons={verification.reasons} />
       </Panel>
 
-      <Panel index="3" title="Kontekst ekspozycji">
+      <Panel title="Kontekst ekspozycji">
         <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
           <dt className="text-muted-foreground">Ruch drogowy</dt>
           <dd className="font-mono tabular-nums">

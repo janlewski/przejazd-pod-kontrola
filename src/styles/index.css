@@ -139,7 +139,22 @@
     outline-offset: 2px;
   }
   a {
-    @apply text-navy underline-offset-2;
+    @apply text-navy underline decoration-1 underline-offset-2;
+  }
+  a:hover {
+    @apply decoration-2;
+  }
+  a[data-slot='button'] {
+    @apply no-underline;
+  }
+  ::selection {
+    background: var(--rail-navy);
+    color: var(--rail-navy-ink);
+  }
+  html {
+    caret-color: var(--rail-navy);
+    accent-color: var(--rail-navy);
+    scrollbar-color: var(--rail-line-strong) transparent;
   }
 }
 

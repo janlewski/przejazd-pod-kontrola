@@ -1,5 +1,27 @@
 import { expect, test } from '@playwright/test'
 
+test('landing: „Otwórz demo” lands on the map with X1 selected', async ({ page }) => {
+  await page.route('https://tile.openstreetmap.org/**', (route) => route.abort())
+  await page.goto('')
+
+  await expect(page.getByRole('heading', { level: 1, name: 'Przejazd pod kontrolą' })).toBeVisible()
+  await expect(
+    page
+      .getByText('3336')
+      .or(page.getByText(/3\s336/))
+      .first(),
+  ).toBeVisible()
+  await expect(page.getByRole('note', { name: 'Dane fikcyjne' })).toBeVisible()
+
+  await page.getByRole('button', { name: 'Jak to działa' }).click()
+  await expect(page.getByRole('heading', { level: 2, name: 'Jak to działa' })).toBeFocused()
+
+  await page.getByRole('link', { name: 'Otwórz demo' }).click()
+  await expect(page).toHaveURL(/#\/przejazdy\?wybrany=X1$/)
+  await expect(page.getByRole('region', { name: 'Wybrany przejazd: Przejazd X1' })).toBeVisible()
+  await expect(page.locator('.leaflet-popup-content')).toContainText('Przejazd X1')
+})
+
 test('/#/przejazdy lists real crossings and labelled fictional cases', async ({ page }) => {
   // OSM tiles are not needed for the smoke test (and must not be fetched in bulk).
   await page.route('https://tile.openstreetmap.org/**', (route) => route.abort())
