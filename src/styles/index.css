@@ -205,6 +205,8 @@
 
 /* Leaflet controls follow the app palette; attribution must stay readable. */
 .leaflet-container {
+  /* Leaflet panes use z-index 400–1000; keep them below the sticky header. */
+  isolation: isolate;
   font-family: var(--font-sans);
   background: var(--rail-subtle);
 }
