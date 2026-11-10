@@ -17,7 +17,7 @@ for (const { path, heading } of PAGES) {
     await page.route('https://tile.openstreetmap.org/**', (route) => route.abort())
     await page.goto(path)
     await expect(page.getByRole('heading', { level: 1, name: heading })).toBeVisible()
-    if (path === '#/przejazdy') await expect(page.getByText(/Wyświetlono/)).toBeVisible()
+    if (path === '#/przejazdy') await expect(page.getByText(/\d z [\d\s\u00a0]+ pozycji/)).toBeVisible()
     const results = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
       // Leaflet's own map controls are third-party markup.

@@ -29,7 +29,7 @@ test('/#/przejazdy lists real crossings and labelled fictional cases', async ({ 
 
   await expect(page.getByRole('heading', { level: 1, name: 'Przejazdy' })).toBeVisible()
   await expect(page.getByRole('note', { name: 'Dane fikcyjne' })).toBeVisible()
-  await expect(page.getByText(/Wyświetlono \d[\d\s\u00a0]* z \d/)).toBeVisible()
+  await expect(page.getByText(/^1[\d\s\u00a0]+ z [\d\s\u00a0]+ pozycji$/)).toBeVisible()
   const table = page.getByRole('table', { name: /Przejazdy i przypadki/ })
   await expect(table.getByRole('link', { name: 'Przejazd X1', exact: true })).toBeVisible()
   await expect(page.locator('.leaflet-control-attribution')).toContainText('OpenStreetMap contributors')
