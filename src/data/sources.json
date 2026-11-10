@@ -1,0 +1,181 @@
+[
+  {
+    "id": "cfr-49-222-app-a",
+    "kind": "document",
+    "title": "49 CFR Part 222, Appendix A — Approved Supplementary Safety Measures",
+    "shortTitle": "49 CFR 222 App. A",
+    "publisher": "Federal Railroad Administration (USA); tekst: Legal Information Institute, Cornell Law School",
+    "url": "https://www.law.cornell.edu/cfr/text/49/appendix-A_to_part_222",
+    "retrievedAt": "2026-11-10",
+    "license": "Akt prawny USA — domena publiczna.",
+    "processing": "Przepisane współczynniki skuteczności środków (USA, kontekst stref ciszy); bez przetwarzania."
+  },
+  {
+    "id": "derived-gpr-match",
+    "kind": "dataset",
+    "title": "Dopasowanie przejazdów do odcinków GPR 2025 (dane pochodne)",
+    "shortTitle": "dopasowanie GPR (opracowanie własne)",
+    "publisher": "Opracowanie własne na podstawie gugik-wfs-przejazdy i gddkia-gpr-2025",
+    "url": "https://github.com/janlewski/przejazd-pod-kontrola/blob/main/scripts/match-gpr.ts",
+    "retrievedAt": "2026-11-10",
+    "license": "Dane pochodne — warunki jak dla danych źródłowych.",
+    "processing": "Najbliższy odcinek GPR (bez autostrad i dróg ekspresowych — brak przejazdów w poziomie szyn) w promieniu 100 m. Pewność „high” ≤ 25 m; „approximate” 25–100 m (uproszczona geometria GPR); „ambiguous”, gdy w promieniu jest inna droga lub odcinek z innym SDRR. Brak dopasowania = brak rekordu, nie zero. Źródło GPR: gddkia-gpr-2025.",
+    "records": 352
+  },
+  {
+    "id": "dzu-2025-1105",
+    "kind": "document",
+    "title": "Rozporządzenie Ministra Infrastruktury z dnia 9 lipca 2025 r. w sprawie warunków technicznych, jakim powinny odpowiadać skrzyżowania linii kolejowych oraz bocznic kolejowych z drogami i ich usytuowanie (Dz.U. 2025 poz. 1105)",
+    "shortTitle": "Dz.U. 2025 poz. 1105",
+    "publisher": "Minister Infrastruktury",
+    "url": "https://eli.gov.pl/api/acts/DU/2025/1105/text.pdf",
+    "retrievedAt": "2026-11-10",
+    "license": "Akt normatywny — nie jest przedmiotem prawa autorskiego (art. 4 pkt 2 ustawy o prawie autorskim i prawach pokrewnych).",
+    "processing": "Progi iloczynu ruchu (§8–§10, §13), częstotliwość pomiarów (zał. nr 1 pkt 1–2, 9–10) i odniesienia do §21, §22, §24, §26, §73 przepisane z tekstu aktu."
+  },
+  {
+    "id": "fhwa-cmf-494",
+    "kind": "document",
+    "title": "CMF Clearinghouse, CMF ID 494 — instalacja rogatek przy istniejącej sygnalizacji świetlnej i dźwiękowej",
+    "shortTitle": "CMF Clearinghouse, ID 494",
+    "publisher": "Federal Highway Administration (USA)",
+    "url": "https://cmfclearinghouse.fhwa.dot.gov/detail.php?facid=494",
+    "retrievedAt": "2026-11-10",
+    "license": "Publikacja rządowa USA — domena publiczna.",
+    "processing": "Przepisana wartość CMF z kontekstem badania; bez przetwarzania."
+  },
+  {
+    "id": "gddkia-gpr-2025",
+    "kind": "dataset",
+    "title": "Generalny Pomiar Ruchu 2025 — średni dobowy ruch roczny (SDRR) na drogach krajowych, warstwa SHP",
+    "shortTitle": "GDDKiA, GPR 2025",
+    "publisher": "Generalna Dyrekcja Dróg Krajowych i Autostrad",
+    "url": "https://www.gov.pl/attachment/7f8ca805-e384-4802-bf10-d36538e6ef84",
+    "retrievedAt": "2026-11-10",
+    "license": "Warunki nieopublikowane przy pliku — dane publiczne, wykorzystane z podaniem źródła (do weryfikacji przed publikacją).",
+    "processing": "Surowy plik ZIP w data/raw/gpr2025-20261110.zip. Odczyt shpjs, reprojekcja ETRS89 / Poland CS92 (EPSG:2180) → WGS84 wg pliku .prj. Zachowane pola: ID, NRDROGI, NAZWA_ODC, SDRR2025. Warstwa obejmuje tylko drogi krajowe; geometria odcinków jest uproszczona (zwykle 2 wierzchołki).",
+    "records": 2422
+  },
+  {
+    "id": "gov-112-przejazdy",
+    "kind": "document",
+    "title": "Przejazdy kolejowo-drogowe — numer alarmowy 112 (żółta naklejka PLK)",
+    "shortTitle": "gov.pl — numer alarmowy 112",
+    "publisher": "Portal Gov.pl — Numer alarmowy 112",
+    "url": "https://www.gov.pl/web/numer-alarmowy-112/przejazdy-kolejowo-drogowe",
+    "retrievedAt": "2026-11-10",
+    "license": "Treść urzędowa — cytowana z podaniem źródła.",
+    "processing": "Opis żółtej naklejki: 9-cyfrowy numer identyfikacyjny przejazdu tworzą numer linii i kilometr linii. Wykorzystane do odczytu linii i kilometra z pola NAZWA."
+  },
+  {
+    "id": "gugik-wfs-przejazdy",
+    "kind": "dataset",
+    "title": "Przejazdy kolejowo-drogowe PKP PLK (usługa WFS, warstwa ms:PKP_PLK)",
+    "shortTitle": "WFS GUGiK / PKP PLK",
+    "publisher": "Główny Urząd Geodezji i Kartografii / PKP Polskie Linie Kolejowe S.A.",
+    "url": "https://mapy.geoportal.gov.pl/wss/service/wfs/sdi/Przejazdy?SERVICE=WFS&REQUEST=GetCapabilities",
+    "retrievedAt": "2026-11-10",
+    "license": "Warunki nieopublikowane w opisie usługi — dane publiczne, wykorzystane z podaniem źródła (do weryfikacji przed publikacją).",
+    "processing": "WFS 2.0.0 GetFeature, GML 3.2, paginacja COUNT=1000/STARTINDEX; surowy snapshot w data/raw/crossings-20261110. Reprojekcja EPSG:2180 → EPSG:4326 (proj4), kolejność osi northing, easting wg urn:ogc:def:crs:EPSG::2180, kontrola regionalna (PLK Lublin na wschodzie, PLK Szczecin na zachodzie). Zachowane pola: gml:id, NAZWA (numer przejazdu), KATEGORIA, STAC_SZLAK, IDDE. Pełny zasięg warstwy.",
+    "records": 11728
+  },
+  {
+    "id": "kolejowyportal-redlight",
+    "kind": "document",
+    "title": "Kolejne przejazdy pod nadzorem Red Light. PKP PLK wskazują kryteria wyboru",
+    "shortTitle": "Kolejowy Portal",
+    "publisher": "Kolejowy Portal",
+    "url": "https://kolejowyportal.pl/kolejne-przejazdy-pod-nadzorem-red-light-pkp-plk-wskazuja-kryteria-wyboru/",
+    "retrievedAt": "2026-11-10",
+    "license": "Artykuł prasowy — cytowany z podaniem źródła (prawo cytatu).",
+    "processing": "Przepisane dane o liczbie systemów i zarejestrowanych naruszeń w 2024 r.; bez przetwarzania."
+  },
+  {
+    "id": "ntsb-rar-17-01",
+    "kind": "document",
+    "title": "NTSB Railroad Accident Report RAR-17/01",
+    "shortTitle": "NTSB RAR-17/01",
+    "publisher": "National Transportation Safety Board (USA)",
+    "url": "https://www.ntsb.gov/investigations/AccidentReports/Reports/RAR1701.pdf",
+    "retrievedAt": "2026-11-10",
+    "license": "Publikacja rządowa USA — domena publiczna.",
+    "processing": "Odniesienie do mechanizmu (kolejka sięgająca torów, koordynacja z sygnalizacją drogową); bez wartości liczbowych."
+  },
+  {
+    "id": "orr-mcb-od",
+    "kind": "document",
+    "title": "Level crossing template — Manually Controlled Barriers with Obstacle Detection (MCB-OD)",
+    "shortTitle": "ORR — MCB-OD",
+    "publisher": "Office of Rail and Road (Wielka Brytania)",
+    "url": "https://www.orr.gov.uk/media/11793",
+    "retrievedAt": "2026-11-10",
+    "license": "Publikacja urzędowa (Open Government Licence, do weryfikacji).",
+    "processing": "Odniesienie do typu przejazdu z detekcją przeszkód; bez wartości liczbowych."
+  },
+  {
+    "id": "osm-tiles",
+    "kind": "dataset",
+    "title": "Podkład mapowy OpenStreetMap (kafle standardowe)",
+    "shortTitle": "OpenStreetMap",
+    "publisher": "OpenStreetMap Foundation; © OpenStreetMap contributors",
+    "url": "https://www.openstreetmap.org/copyright",
+    "retrievedAt": "2026-11-10",
+    "license": "Dane: ODbL 1.0; kafle zgodnie z OSMF Tile Usage Policy (https://operations.osmfoundation.org/policies/tiles/).",
+    "processing": "Kafle pobierane przez przeglądarkę wyłącznie podczas przeglądania mapy; bez prefetchu, zapisu i trybu offline. Atrybucja widoczna na mapie."
+  },
+  {
+    "id": "osm-weryfikacja-polozenia",
+    "kind": "dataset",
+    "title": "Weryfikacja reprojekcji: węzły railway=level_crossing w OpenStreetMap (Overpass API)",
+    "shortTitle": "OpenStreetMap (weryfikacja)",
+    "publisher": "© OpenStreetMap contributors",
+    "url": "https://www.openstreetmap.org/copyright",
+    "retrievedAt": "2026-11-10",
+    "license": "ODbL 1.0.",
+    "processing": "Jednorazowe zapytanie o 4 przejazdy po tagu ref (numer z żółtej naklejki). Różnica położenia po reprojekcji ≤ 2 m; współrzędne kontrolne zapisane w tests/geo.test.ts. Dane OSM nie są dołączone do aplikacji."
+  },
+  {
+    "id": "pkbwk-raport-2024",
+    "kind": "document",
+    "title": "Państwowa Komisja Badania Wypadków Kolejowych — Raport roczny 2024",
+    "shortTitle": "PKBWK, raport roczny 2024",
+    "publisher": "Państwowa Komisja Badania Wypadków Kolejowych",
+    "url": "https://www.gov.pl/attachment/b1288d86-5f9c-4d46-9829-0bc03b855257",
+    "retrievedAt": "2026-11-10",
+    "license": "Dokument urzędowy (art. 4 pkt 2 ustawy o prawie autorskim i prawach pokrewnych) — cytowany z podaniem źródła.",
+    "processing": "Lista przyczyn zdarzeń na przejazdach jako punkt wyjścia do wzorców diagnozy; bez przetwarzania danych liczbowych."
+  },
+  {
+    "id": "railengineer-od",
+    "kind": "document",
+    "title": "Obstacle detection for level crossings",
+    "shortTitle": "Rail Engineer",
+    "publisher": "Rail Engineer (Wielka Brytania)",
+    "url": "https://www.railengineer.co.uk/obstacle-detection-for-level-crossings/",
+    "retrievedAt": "2026-11-10",
+    "license": "Artykuł branżowy — cytowany z podaniem źródła (prawo cytatu).",
+    "processing": "Opis działania detekcji przeszkód (radar, LiDAR) na przejazdach Network Rail; bez wartości liczbowych."
+  },
+  {
+    "id": "txdot-quiet-zones",
+    "kind": "document",
+    "title": "Rail-Highway Operations Manual — Approving Quiet Zones",
+    "shortTitle": "TxDOT — Quiet Zones",
+    "publisher": "Texas Department of Transportation",
+    "url": "https://www.txdot.gov/manuals/rrd/rho/quiet_zones/approving_quiet_zone-i1001063.html",
+    "retrievedAt": "2026-11-10",
+    "license": "Publikacja urzędowa — cytowana z podaniem źródła.",
+    "processing": "Potwierdzenie współczynników skuteczności separatorów (FRA); bez przetwarzania."
+  },
+  {
+    "id": "utk-raport-2025",
+    "kind": "document",
+    "title": "Urząd Transportu Kolejowego — Raport w sprawie bezpieczeństwa za 2025",
+    "shortTitle": "UTK, raport za 2025",
+    "publisher": "Urząd Transportu Kolejowego",
+    "url": "https://dziennikurzedowy.utk.gov.pl/download/6/3436/Raportwsprawiebezpieczenstwaza2025-sig.pdf",
+    "retrievedAt": "2026-11-10",
+    "license": "Dokument urzędowy (art. 4 pkt 2 ustawy o prawie autorskim i prawach pokrewnych) — cytowany z podaniem źródła.",
+    "processing": "Kategorie zdarzeń na przejazdach i przejściach jako punkt wyjścia do wzorców diagnozy; bez przetwarzania danych liczbowych."
+  }
+]

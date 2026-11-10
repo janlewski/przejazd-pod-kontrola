@@ -1,0 +1,164 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Railway-signage palette.
+ * Signal red is reserved for P1 and errors; warning yellow for P2 and warnings.
+ */
+:root {
+  --radius: 0.25rem;
+
+  --rail-paper: #fafaf7;
+  --rail-ink: #1f2328;
+  --rail-ink-muted: #545a61;
+  --rail-line: #d9d9d4;
+  --rail-line-strong: #a9aaa4;
+  --rail-surface: #ffffff;
+  --rail-subtle: #f1f1ec;
+  --rail-signal: #c8102e;
+  --rail-signal-ink: #ffffff;
+  --rail-warning: #f2b705;
+  --rail-warning-ink: #1f2328;
+  --rail-navy: #1e3a5f;
+  --rail-navy-ink: #ffffff;
+  --rail-ok: #2f5d3a;
+
+  --background: var(--rail-paper);
+  --foreground: var(--rail-ink);
+  --card: var(--rail-surface);
+  --card-foreground: var(--rail-ink);
+  --popover: var(--rail-surface);
+  --popover-foreground: var(--rail-ink);
+  --primary: var(--rail-navy);
+  --primary-foreground: var(--rail-navy-ink);
+  --secondary: var(--rail-subtle);
+  --secondary-foreground: var(--rail-ink);
+  --muted: var(--rail-subtle);
+  --muted-foreground: var(--rail-ink-muted);
+  --accent: var(--rail-subtle);
+  --accent-foreground: var(--rail-ink);
+  --destructive: var(--rail-signal);
+  --destructive-foreground: var(--rail-signal-ink);
+  --border: var(--rail-line);
+  --input: var(--rail-line-strong);
+  --ring: var(--rail-navy);
+
+  --sidebar: var(--rail-ink);
+  --sidebar-foreground: #e7e7e2;
+  --sidebar-primary: var(--rail-paper);
+  --sidebar-primary-foreground: var(--rail-ink);
+  --sidebar-accent: #2c3238;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #3a4047;
+  --sidebar-ring: var(--rail-warning);
+}
+
+/* Thin borders instead of shadows. */
+@theme {
+  --shadow-2xs: 0 0 #0000;
+  --shadow-xs: 0 0 #0000;
+  --shadow-sm: 0 0 #0000;
+  --shadow-md: 0 0 #0000;
+  --shadow-lg: 0 0 #0000;
+  --shadow-xl: 0 0 #0000;
+}
+
+@theme inline {
+  --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1rem;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.25rem;
+  --text-base: 1rem;
+  --text-base--line-height: 1.5rem;
+  --text-lg: 1.25rem;
+  --text-lg--line-height: 1.75rem;
+  --text-xl: 1.5rem;
+  --text-xl--line-height: 2rem;
+
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius);
+  --radius-xl: var(--radius);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-signal: var(--rail-signal);
+  --color-signal-foreground: var(--rail-signal-ink);
+  --color-warning: var(--rail-warning);
+  --color-warning-foreground: var(--rail-warning-ink);
+  --color-navy: var(--rail-navy);
+  --color-navy-foreground: var(--rail-navy-ink);
+  --color-ok: var(--rail-ok);
+  --color-line-strong: var(--rail-line-strong);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    font-feature-settings: 'tnum' 0;
+  }
+  body {
+    @apply bg-background text-foreground font-sans text-sm antialiased;
+  }
+  :focus-visible {
+    outline: 2px solid var(--rail-navy);
+    outline-offset: 2px;
+  }
+  a {
+    @apply text-navy underline-offset-2;
+  }
+}
+
+@layer components {
+  .fictional-frame {
+    border: 1px dashed var(--rail-ink);
+  }
+}
+
+/* Leaflet controls follow the app palette; attribution must stay readable. */
+.leaflet-container {
+  font-family: var(--font-sans);
+  background: var(--rail-subtle);
+}
+.leaflet-control-attribution {
+  font-size: 11px;
+  background: rgb(255 255 255 / 0.9) !important;
+  color: var(--rail-ink) !important;
+}
+.leaflet-control-attribution a {
+  color: var(--rail-navy) !important;
+}

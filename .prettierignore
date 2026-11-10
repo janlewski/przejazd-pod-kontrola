@@ -1,0 +1,12 @@
+dist
+coverage
+node_modules
+data/raw
+data/derived
+src/data/*.json
+src/components/ui
+pnpm-lock.yaml
+PLAN_IMPLEMENTACJI.md
+.cursor
+playwright-report
+test-results
