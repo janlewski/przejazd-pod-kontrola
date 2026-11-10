@@ -61,12 +61,15 @@ export const FictionalCase = z.object({
   id: z.string().regex(/^X([1-9]|10)$/),
   name: z.string().min(1),
   origin: z.literal('fictional'),
-  crossingId: z.null(),
-  category: Category.nullable(),
-  schematicPosition: z.object({
+  /** Real crossing used as the setting (number, position, unit from the WFS snapshot). */
+  crossing: z.object({
+    id: z.string().min(1),
+    name: z.string().min(1),
+    unit: z.string().nullable(),
     lat: z.number().min(49).max(55),
     lon: z.number().min(14).max(24.2),
   }),
+  category: Category.nullable(),
   roadAadt: z.number().int().nonnegative().nullable(),
   trainsPerDay: z.number().int().nonnegative().nullable(),
   trafficMeasuredAt: isoDate.nullable(),

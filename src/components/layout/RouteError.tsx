@@ -1,5 +1,9 @@
 import { isRouteErrorResponse, Link, useRouteError } from 'react-router'
 
+export function RouteLoading() {
+  return <p className="p-4 text-sm text-muted-foreground">Wczytywanie…</p>
+}
+
 export function RouteError() {
   const error = useRouteError()
   const notFound = isRouteErrorResponse(error) && error.status === 404
@@ -13,7 +17,7 @@ export function RouteError() {
             ? error.message
             : 'Nie udało się wyświetlić widoku.'}
       </p>
-      <Link to="/" className="text-sm underline">
+      <Link to="/przeglad" className="text-sm underline">
         Wróć do przeglądu
       </Link>
     </div>

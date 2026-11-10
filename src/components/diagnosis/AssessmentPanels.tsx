@@ -1,25 +1,44 @@
 import type { ReactNode } from 'react'
 import { PriorityBadge, VerificationBadge } from '@/components/common/badges'
 import { ReasonList } from '@/components/common/ReasonList'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { cn } from '@/lib/utils'
 import { TRAFFIC_PRODUCT_B, TRAFFIC_PRODUCT_C } from '@/config/thresholds'
 import type { Assessment } from '@/domain/assess'
 import { formatInt, formatOrMissing } from '@/lib/format'
 import { INSPECTION_LABEL, NOT_ASSESSED_LABEL, VERIFICATION_LABEL } from '@/lib/labels'
 
-function Panel({ title, children }: { title: string; children: ReactNode }) {
+function Panel({
+  title,
+  accent = 'border-t-foreground',
+  children,
+}: {
+  title: string
+  accent?: string
+  children: ReactNode
+}) {
   return (
-    <section className="flex flex-col gap-3 rounded-sm border bg-card p-3" aria-label={title}>
-      <h2 className="text-sm font-semibold">{title}</h2>
-      {children}
-    </section>
+    <Card role="region" aria-label={title} className={cn('gap-3 border-t-4 py-3', accent)}>
+      <CardHeader className="px-3">
+        <CardTitle className="text-base">
+          <h2>{title}</h2>
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-3 px-3">{children}</CardContent>
+    </Card>
   )
 }
+
+const INSPECTION_ACCENT = { P1: 'border-t-signal', P2: 'border-t-warning', P3: 'border-t-ok' } as const
 
 export function AssessmentPanels({ assessment, fictional }: { assessment: Assessment; fictional: boolean }) {
   const { inspection, verification, exposure } = assessment
   return (
     <div className="grid gap-3 lg:grid-cols-3">
-      <Panel title="Priorytet kontroli">
+      <Panel
+        title="Priorytet kontroli"
+        accent={inspection.level ? INSPECTION_ACCENT[inspection.level] : 'border-t-line-strong'}
+      >
         <div className="flex items-center gap-2">
           <PriorityBadge level={inspection.level} />
           <span className="text-sm">

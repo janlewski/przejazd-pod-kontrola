@@ -20,6 +20,11 @@ export function caseById(id: string): FictionalCase | undefined {
   return fictionalCases.find((c) => c.id === id)
 }
 
+/** The fictional case set on a real crossing, if any. */
+export function caseByCrossingId(crossingId: string): FictionalCase | undefined {
+  return fictionalCases.find((c) => c.crossing.id === crossingId)
+}
+
 export type RealData = {
   crossings: Crossing[]
   gprByCrossing: Map<string, GprMatch>
@@ -41,7 +46,11 @@ export function loadRealData(): Promise<RealData> {
     }),
   ]).then(([crossings, matches]) => {
     const gprByCrossing = new Map(matches.map((m) => [m.crossingId, m]))
-    const rows = crossings.map((c) => crossingRow(c, gprByCrossing.get(c.id) ?? null, DEMO_AS_OF))
+    // A crossing used as the setting of a fictional case is listed once, as that case.
+    const caseCrossings = new Set(fictionalCases.map((c) => c.crossing.id))
+    const rows = crossings
+      .filter((c) => !caseCrossings.has(c.id))
+      .map((c) => crossingRow(c, gprByCrossing.get(c.id) ?? null, DEMO_AS_OF))
     return { crossings, gprByCrossing, rows }
   })
   realData.catch(() => {

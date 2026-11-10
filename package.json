@@ -17,7 +17,8 @@
     "data:crossings": "tsx scripts/fetch-crossings.ts",
     "data:gpr": "tsx scripts/parse-gpr.ts",
     "data:match": "tsx scripts/match-gpr.ts",
-    "data:build": "tsx scripts/build-dataset.ts"
+    "data:build": "tsx scripts/build-dataset.ts",
+    "data:cases": "tsx scripts/assign-cases.ts"
   },
   "dependencies": {
     "@fontsource/ibm-plex-mono": "^5.3.0",

@@ -5,7 +5,7 @@ export function CaveatsPanel({ caveats }: { caveats: Caveat[] }) {
   return (
     <section
       aria-labelledby="zastrzezenia"
-      className="flex flex-col gap-2 rounded-sm border-2 border-foreground bg-card p-3"
+      className="flex flex-col gap-2 self-start rounded-sm border-2 border-foreground bg-card p-3 xl:sticky xl:top-4"
     >
       <h2 id="zastrzezenia" className="text-sm font-semibold">
         Zastrzeżenia — przeczytaj przed interpretacją wyniku

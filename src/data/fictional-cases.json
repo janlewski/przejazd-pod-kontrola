@@ -3,9 +3,14 @@
     "id": "X1",
     "name": "Przejazd X1",
     "origin": "fictional",
-    "crossingId": null,
+    "crossing": {
+      "id": "PKP_PLK.5145",
+      "name": "108 107 308",
+      "unit": "PKP PLK KRAKÓW",
+      "lat": 49.554061,
+      "lon": 22.203322
+    },
     "category": "B",
-    "schematicPosition": { "lat": 52.62, "lon": 19.95 },
     "roadAadt": 8400,
     "trainsPerDay": 64,
     "trafficMeasuredAt": "2024-04-17",
@@ -23,27 +28,75 @@
       }
     ],
     "violations": [
-      { "period": "2026-01", "count": 18, "method": "Kamera monitoringu — objazdy półrogatek w miesiącu" },
-      { "period": "2026-02", "count": 21, "method": "Kamera monitoringu — objazdy półrogatek w miesiącu" },
-      { "period": "2026-03", "count": 24, "method": "Kamera monitoringu — objazdy półrogatek w miesiącu" },
-      { "period": "2026-04", "count": 22, "method": "Kamera monitoringu — objazdy półrogatek w miesiącu" },
-      { "period": "2026-05", "count": 19, "method": "Kamera monitoringu — objazdy półrogatek w miesiącu" },
-      { "period": "2026-06", "count": 15, "method": "Kamera monitoringu — objazdy półrogatek w miesiącu" },
-      { "period": "2026-07", "count": 9, "method": "Kamera monitoringu — objazdy półrogatek w miesiącu" },
-      { "period": "2026-08", "count": 7, "method": "Kamera monitoringu — objazdy półrogatek w miesiącu" },
-      { "period": "2026-09", "count": 8, "method": "Kamera monitoringu — objazdy półrogatek w miesiącu" },
-      { "period": "2026-10", "count": 6, "method": "Kamera monitoringu — objazdy półrogatek w miesiącu" }
+      {
+        "period": "2026-01",
+        "count": 18,
+        "method": "Kamera monitoringu — objazdy półrogatek w miesiącu"
+      },
+      {
+        "period": "2026-02",
+        "count": 21,
+        "method": "Kamera monitoringu — objazdy półrogatek w miesiącu"
+      },
+      {
+        "period": "2026-03",
+        "count": 24,
+        "method": "Kamera monitoringu — objazdy półrogatek w miesiącu"
+      },
+      {
+        "period": "2026-04",
+        "count": 22,
+        "method": "Kamera monitoringu — objazdy półrogatek w miesiącu"
+      },
+      {
+        "period": "2026-05",
+        "count": 19,
+        "method": "Kamera monitoringu — objazdy półrogatek w miesiącu"
+      },
+      {
+        "period": "2026-06",
+        "count": 15,
+        "method": "Kamera monitoringu — objazdy półrogatek w miesiącu"
+      },
+      {
+        "period": "2026-07",
+        "count": 9,
+        "method": "Kamera monitoringu — objazdy półrogatek w miesiącu"
+      },
+      {
+        "period": "2026-08",
+        "count": 7,
+        "method": "Kamera monitoringu — objazdy półrogatek w miesiącu"
+      },
+      {
+        "period": "2026-09",
+        "count": 8,
+        "method": "Kamera monitoringu — objazdy półrogatek w miesiącu"
+      },
+      {
+        "period": "2026-10",
+        "count": 6,
+        "method": "Kamera monitoringu — objazdy półrogatek w miesiącu"
+      }
     ],
     "lastInspectionAt": "2026-04-02",
-    "evaluation": { "countermeasureId": "CM-MEDIAN", "implementedAt": "2026-06-15" }
+    "evaluation": {
+      "countermeasureId": "CM-MEDIAN",
+      "implementedAt": "2026-06-15"
+    }
   },
   {
     "id": "X2",
     "name": "Przejazd X2",
     "origin": "fictional",
-    "crossingId": null,
+    "crossing": {
+      "id": "PKP_PLK.674",
+      "name": "271 117 388",
+      "unit": "PKP PLK POZNAŃ",
+      "lat": 52.037295,
+      "lon": 16.604844
+    },
     "category": "B",
-    "schematicPosition": { "lat": 51.86, "lon": 16.42 },
     "roadAadt": 14200,
     "trainsPerDay": 48,
     "trafficMeasuredAt": "2025-04-23",
@@ -68,9 +121,14 @@
     "id": "X3",
     "name": "Przejazd X3",
     "origin": "fictional",
-    "crossingId": null,
+    "crossing": {
+      "id": "PKP_PLK.2537",
+      "name": "562 000 581",
+      "unit": "PKP PLK LUBLIN",
+      "lat": 51.236727,
+      "lon": 22.650665
+    },
     "category": "D",
-    "schematicPosition": { "lat": 53.42, "lon": 22.31 },
     "roadAadt": 1100,
     "trainsPerDay": 22,
     "trafficMeasuredAt": "2023-09-13",
@@ -95,9 +153,14 @@
     "id": "X4",
     "name": "Przejazd X4",
     "origin": "fictional",
-    "crossingId": null,
+    "crossing": {
+      "id": "PKP_PLK.2507",
+      "name": "503 005 173",
+      "unit": "PKP PLK WARSZAWA",
+      "lat": 52.264957,
+      "lon": 21.066348
+    },
     "category": "D",
-    "schematicPosition": { "lat": 50.71, "lon": 21.02 },
     "roadAadt": 2600,
     "trainsPerDay": 30,
     "trafficMeasuredAt": "2025-10-01",
@@ -110,10 +173,26 @@
       }
     ],
     "violations": [
-      { "period": "2026-07", "count": 31, "method": "Liczenie w terenie — 2 godziny w tygodniu" },
-      { "period": "2026-08", "count": 28, "method": "Liczenie w terenie — 2 godziny w tygodniu" },
-      { "period": "2026-09", "count": 33, "method": "Liczenie w terenie — 2 godziny w tygodniu" },
-      { "period": "2026-10", "count": 30, "method": "Liczenie w terenie — 2 godziny w tygodniu" }
+      {
+        "period": "2026-07",
+        "count": 31,
+        "method": "Liczenie w terenie — 2 godziny w tygodniu"
+      },
+      {
+        "period": "2026-08",
+        "count": 28,
+        "method": "Liczenie w terenie — 2 godziny w tygodniu"
+      },
+      {
+        "period": "2026-09",
+        "count": 33,
+        "method": "Liczenie w terenie — 2 godziny w tygodniu"
+      },
+      {
+        "period": "2026-10",
+        "count": 30,
+        "method": "Liczenie w terenie — 2 godziny w tygodniu"
+      }
     ],
     "lastInspectionAt": "2026-07-15",
     "evaluation": null
@@ -122,9 +201,14 @@
     "id": "X5",
     "name": "Przejazd X5",
     "origin": "fictional",
-    "crossingId": null,
+    "crossing": {
+      "id": "PKP_PLK.107",
+      "name": "273 323 851",
+      "unit": "PKP PLK SZCZECIN",
+      "lat": 53.164155,
+      "lon": 14.465073
+    },
     "category": "C",
-    "schematicPosition": { "lat": 52.18, "lon": 15.21 },
     "roadAadt": null,
     "trainsPerDay": null,
     "trafficMeasuredAt": null,
@@ -138,9 +222,14 @@
     "id": "X6",
     "name": "Przejazd X6",
     "origin": "fictional",
-    "crossingId": null,
+    "crossing": {
+      "id": "PKP_PLK.128",
+      "name": "274 012 509",
+      "unit": "PKP PLK WROCŁAW",
+      "lat": 51.064253,
+      "lon": 16.854888
+    },
     "category": "C",
-    "schematicPosition": { "lat": 51.12, "lon": 18.55 },
     "roadAadt": 9800,
     "trainsPerDay": 40,
     "trafficMeasuredAt": "2022-05-11",
@@ -153,27 +242,75 @@
       }
     ],
     "violations": [
-      { "period": "2026-01", "count": 44, "method": "Liczenie w terenie — próbka godzin szczytu" },
-      { "period": "2026-02", "count": 47, "method": "Liczenie w terenie — próbka godzin szczytu" },
-      { "period": "2026-03", "count": 41, "method": "Liczenie w terenie — próbka godzin szczytu" },
-      { "period": "2026-04", "count": 38, "method": "System rejestracji wykroczeń — pełna doba" },
-      { "period": "2026-05", "count": 33, "method": "System rejestracji wykroczeń — pełna doba" },
-      { "period": "2026-06", "count": 35, "method": "System rejestracji wykroczeń — pełna doba" },
-      { "period": "2026-07", "count": 31, "method": "System rejestracji wykroczeń — pełna doba" },
-      { "period": "2026-08", "count": 36, "method": "System rejestracji wykroczeń — pełna doba" },
-      { "period": "2026-09", "count": 30, "method": "System rejestracji wykroczeń — pełna doba" },
-      { "period": "2026-10", "count": 32, "method": "System rejestracji wykroczeń — pełna doba" }
+      {
+        "period": "2026-01",
+        "count": 44,
+        "method": "Liczenie w terenie — próbka godzin szczytu"
+      },
+      {
+        "period": "2026-02",
+        "count": 47,
+        "method": "Liczenie w terenie — próbka godzin szczytu"
+      },
+      {
+        "period": "2026-03",
+        "count": 41,
+        "method": "Liczenie w terenie — próbka godzin szczytu"
+      },
+      {
+        "period": "2026-04",
+        "count": 38,
+        "method": "System rejestracji wykroczeń — pełna doba"
+      },
+      {
+        "period": "2026-05",
+        "count": 33,
+        "method": "System rejestracji wykroczeń — pełna doba"
+      },
+      {
+        "period": "2026-06",
+        "count": 35,
+        "method": "System rejestracji wykroczeń — pełna doba"
+      },
+      {
+        "period": "2026-07",
+        "count": 31,
+        "method": "System rejestracji wykroczeń — pełna doba"
+      },
+      {
+        "period": "2026-08",
+        "count": 36,
+        "method": "System rejestracji wykroczeń — pełna doba"
+      },
+      {
+        "period": "2026-09",
+        "count": 30,
+        "method": "System rejestracji wykroczeń — pełna doba"
+      },
+      {
+        "period": "2026-10",
+        "count": 32,
+        "method": "System rejestracji wykroczeń — pełna doba"
+      }
     ],
     "lastInspectionAt": "2026-02-10",
-    "evaluation": { "countermeasureId": "CM-REDLIGHT", "implementedAt": "2026-04-01" }
+    "evaluation": {
+      "countermeasureId": "CM-REDLIGHT",
+      "implementedAt": "2026-04-01"
+    }
   },
   {
     "id": "X7",
     "name": "Przejazd X7",
     "origin": "fictional",
-    "crossingId": null,
+    "crossing": {
+      "id": "PKP_PLK.1",
+      "name": "231 008 414",
+      "unit": "PKP PLK GDAŃSK",
+      "lat": 52.703172,
+      "lon": 18.286864
+    },
     "category": "D",
-    "schematicPosition": { "lat": 53.88, "lon": 17.43 },
     "roadAadt": 180,
     "trainsPerDay": 36,
     "trafficMeasuredAt": "2024-09-18",
@@ -193,9 +330,14 @@
     "id": "X8",
     "name": "Przejazd X8",
     "origin": "fictional",
-    "crossingId": null,
+    "crossing": {
+      "id": "PKP_PLK.4918",
+      "name": "140 046 318",
+      "unit": "PKP PLK SOSNOWIEC",
+      "lat": 50.069907,
+      "lon": 18.476681
+    },
     "category": "B",
-    "schematicPosition": { "lat": 50.33, "lon": 18.97 },
     "roadAadt": 6300,
     "trainsPerDay": 90,
     "trafficMeasuredAt": "2023-04-19",
@@ -220,9 +362,14 @@
     "id": "X9",
     "name": "Przejazd X9",
     "origin": "fictional",
-    "crossingId": null,
+    "crossing": {
+      "id": "PKP_PLK.2503",
+      "name": "449 013 189",
+      "unit": "PKP PLK WARSZAWA",
+      "lat": 52.256606,
+      "lon": 21.179412
+    },
     "category": "B",
-    "schematicPosition": { "lat": 52.41, "lon": 21.47 },
     "roadAadt": 5200,
     "trainsPerDay": 120,
     "trafficMeasuredAt": "2025-05-14",
@@ -242,19 +389,40 @@
     "id": "X10",
     "name": "Przejazd X10",
     "origin": "fictional",
-    "crossingId": null,
+    "crossing": {
+      "id": "PKP_PLK.534",
+      "name": "245 001 291",
+      "unit": "PKP PLK GDAŃSK",
+      "lat": 52.868568,
+      "lon": 18.710547
+    },
     "category": "B",
-    "schematicPosition": { "lat": 51.48, "lon": 23.11 },
     "roadAadt": 3100,
     "trainsPerDay": 52,
     "trafficMeasuredAt": "2025-05-14",
     "summary": "Przypadek bez objawów i naruszeń — bez działań.",
     "observations": [],
     "violations": [
-      { "period": "2026-07", "count": 0, "method": "Kamera monitoringu — objazdy półrogatek w miesiącu" },
-      { "period": "2026-08", "count": 0, "method": "Kamera monitoringu — objazdy półrogatek w miesiącu" },
-      { "period": "2026-09", "count": 0, "method": "Kamera monitoringu — objazdy półrogatek w miesiącu" },
-      { "period": "2026-10", "count": 0, "method": "Kamera monitoringu — objazdy półrogatek w miesiącu" }
+      {
+        "period": "2026-07",
+        "count": 0,
+        "method": "Kamera monitoringu — objazdy półrogatek w miesiącu"
+      },
+      {
+        "period": "2026-08",
+        "count": 0,
+        "method": "Kamera monitoringu — objazdy półrogatek w miesiącu"
+      },
+      {
+        "period": "2026-09",
+        "count": 0,
+        "method": "Kamera monitoringu — objazdy półrogatek w miesiącu"
+      },
+      {
+        "period": "2026-10",
+        "count": 0,
+        "method": "Kamera monitoringu — objazdy półrogatek w miesiącu"
+      }
     ],
     "lastInspectionAt": "2026-09-30",
     "evaluation": null

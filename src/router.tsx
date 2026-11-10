@@ -1,7 +1,7 @@
 import type { ComponentType } from 'react'
 import { createHashRouter } from 'react-router'
 import { AppShell } from '@/components/layout/AppShell'
-import { RouteError } from '@/components/layout/RouteError'
+import { RouteError, RouteLoading } from '@/components/layout/RouteError'
 
 const page = (load: () => Promise<{ default: ComponentType }>) => async () => ({
   Component: (await load()).default,
@@ -10,14 +10,19 @@ const page = (load: () => Promise<{ default: ComponentType }>) => async () => ({
 /** Hash routing: GitHub Pages has no server rewrites, so deep links must not depend on them. */
 export const router = createHashRouter([
   {
-    path: '/',
+    index: true,
+    HydrateFallback: RouteLoading,
+    errorElement: <RouteError />,
+    lazy: page(() => import('@/pages/LandingPage')),
+  },
+  {
     Component: AppShell,
-    HydrateFallback: () => <p className="p-4 text-sm text-muted-foreground">Wczytywanie…</p>,
+    HydrateFallback: RouteLoading,
     children: [
       {
         errorElement: <RouteError />,
         children: [
-          { index: true, lazy: page(() => import('@/pages/OverviewPage')) },
+          { path: 'przeglad', lazy: page(() => import('@/pages/OverviewPage')) },
           { path: 'przejazdy', lazy: page(() => import('@/pages/CrossingsPage')) },
           { path: 'przejazdy/:id', lazy: page(() => import('@/pages/CrossingDetailPage')) },
           { path: 'srodki', lazy: page(() => import('@/pages/CountermeasuresPage')) },

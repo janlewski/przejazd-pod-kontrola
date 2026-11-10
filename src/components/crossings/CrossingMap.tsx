@@ -29,9 +29,11 @@ function popupHtml(row: Row): string {
         : 'brak danych o ruchu'
   return [
     `<div class="flex flex-col gap-1 text-xs">`,
-    fictional ? `<strong class="font-mono tracking-wider">DANE FIKCYJNE · położenie umowne</strong>` : '',
-    `<strong class="text-sm">${escapeHtml(row.name)}</strong>`,
-    `<span>Kategoria ${row.category ?? '?'} · ${escapeHtml(level)} · ${row.assessment.verification.level}</span>`,
+    fictional ? `<strong class="tracking-wide">DANE FIKCYJNE na realnym przejeździe</strong>` : '',
+    `<strong class="text-sm">${escapeHtml(row.name)}${
+      fictional && row.crossingName ? ` · <span class="font-mono">${escapeHtml(row.crossingName)}</span>` : ''
+    }</strong>`,
+    `<span>Kategoria ${row.category ?? '?'}, kontrola: ${escapeHtml(level)}, dane: ${row.assessment.verification.level}</span>`,
     `<span>${escapeHtml(aadt)}</span>`,
     `<a href="#/przejazdy/${encodeURIComponent(row.id)}">Otwórz kartę przejazdu</a>`,
     `</div>`,
@@ -68,13 +70,19 @@ function fictionalIcon(row: Row): L.DivIcon {
 export function CrossingMap({
   rows,
   colorMode,
+  selectedId = null,
   className,
 }: {
   rows: Row[]
   colorMode: ColorMode
+  /** Row to centre on with its popup open (e.g. the demo case from the landing page). */
+  selectedId?: string | null
   className?: string
 }) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const userMovedRef = useRef(false)
+  const centeredRef = useRef<string | null>(null)
+  const markersRef = useRef(new Map<string, L.Marker | L.CircleMarker>())
   const [map, setMap] = useState<L.Map | null>(null)
   const [renderer] = useState(() => L.canvas({ padding: 0.5 }))
 
@@ -84,6 +92,8 @@ export function CrossingMap({
       center: POLAND_CENTER,
       zoom: POLAND_ZOOM,
       minZoom: 5,
+      zoomSnap: 0.25,
+      zoomDelta: 0.5,
       preferCanvas: true,
     })
     L.tileLayer(TILE_URL, { attribution: TILE_ATTRIBUTION, maxZoom: TILE_MAX_ZOOM }).addTo(instance)
@@ -91,13 +101,13 @@ export function CrossingMap({
       '<a href="https://leafletjs.com" target="_blank" rel="noreferrer">Leaflet</a>',
     )
     // The container settles its size after layout; keep Poland fitted until the user moves the map.
-    let userMoved = false
-    instance.on('dragstart', () => (userMoved = true))
-    containerRef.current.addEventListener('wheel', () => (userMoved = true), { passive: true })
-    instance.zoomControl.getContainer()?.addEventListener('click', () => (userMoved = true))
+    const moved = () => (userMovedRef.current = true)
+    instance.on('dragstart', moved)
+    containerRef.current.addEventListener('wheel', moved, { passive: true })
+    instance.zoomControl.getContainer()?.addEventListener('click', moved)
     const observer = new ResizeObserver(() => {
       instance.invalidateSize()
-      if (!userMoved && containerRef.current && containerRef.current.clientWidth > 0) {
+      if (!userMovedRef.current && containerRef.current && containerRef.current.clientWidth > 0) {
         instance.fitBounds(POLAND_BOUNDS)
       }
     })
@@ -114,17 +124,20 @@ export function CrossingMap({
     if (!map) return
     const layer = L.layerGroup()
     const points: L.CircleMarker[] = []
+    const markers = markersRef.current
+    markers.clear()
     const initial = pointStyle(map.getZoom())
     for (const row of rows) {
       if (row.origin === 'fictional') {
-        L.marker([row.lat, row.lon], {
+        const marker = L.marker([row.lat, row.lon], {
           icon: fictionalIcon(row),
-          title: `${row.name} — DANE FIKCYJNE, położenie umowne`,
+          title: `${row.name}: DANE FIKCYJNE na realnym przejeździe ${row.crossingName ?? ''}`,
           keyboard: true,
           zIndexOffset: 1000,
         })
           .bindPopup(popupHtml(row))
           .addTo(layer)
+        markers.set(row.id, marker)
         continue
       }
       const fill =
@@ -141,6 +154,7 @@ export function CrossingMap({
         .bindPopup(popupHtml(row))
         .addTo(layer)
       points.push(point)
+      markers.set(row.id, point)
     }
     const restyle = () => {
       const style = pointStyle(map.getZoom())
@@ -153,6 +167,19 @@ export function CrossingMap({
       layer.remove()
     }
   }, [map, renderer, rows, colorMode])
+
+  useEffect(() => {
+    if (!map || !selectedId) return
+    const marker = markersRef.current.get(selectedId)
+    if (!marker) return
+    // Centre once per selection; markers are rebuilt on filter changes, so the popup is reopened.
+    if (centeredRef.current !== selectedId) {
+      centeredRef.current = selectedId
+      userMovedRef.current = true
+      map.setView(marker.getLatLng(), Math.max(map.getZoom(), 7.5))
+    }
+    marker.openPopup()
+  }, [map, selectedId, rows, colorMode])
 
   return (
     <div

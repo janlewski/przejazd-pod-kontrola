@@ -176,6 +176,11 @@ export default function MethodPage() {
                 pilotażu potrzebne są dane wewnętrzne zarządców.
               </li>
               <li>
+                Przypadki X1–X10 osadzono na realnych przejazdach według stałej reguły (ta sama kategoria,
+                różne jednostki PLK, brak danych GPR, najniższy numer obiektu WFS; scripts/assign-cases.ts).
+                Zdarzenia nie dotyczą tych przejazdów.
+              </li>
+              <li>
                 Reguły objaw → przyczyna → środek oparto na raportach PKBWK i UTK; wymagają walidacji z
                 ekspertami.
               </li>

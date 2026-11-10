@@ -1,10 +1,13 @@
-import { NavLink, Outlet, useLocation } from 'react-router'
 import { useEffect, useRef } from 'react'
+import { Link, NavLink, Outlet, useLocation } from 'react-router'
+import { BrandMark } from '@/components/common/BrandMark'
 import { Toaster } from '@/components/ui/sonner'
+import { sourceById } from '@/data'
+import { formatDate } from '@/lib/format'
 import { cn } from '@/lib/utils'
 
-const NAV = [
-  { to: '/', label: 'Przegląd', end: true },
+const STATIONS = [
+  { to: '/przeglad', label: 'Przegląd', end: true },
   { to: '/przejazdy', label: 'Przejazdy', end: false },
   { to: '/srodki', label: 'Środki zaradcze', end: false },
   { to: '/wdrozenia', label: 'Wdrożenia', end: false },
@@ -12,12 +15,59 @@ const NAV = [
   { to: '/metoda', label: 'Metoda i źródła', end: false },
 ] as const
 
+function LineNav() {
+  return (
+    <nav aria-label="Główna nawigacja">
+      <ol className="relative flex flex-row flex-wrap gap-1 md:flex-col md:gap-0">
+        <span
+          aria-hidden
+          className="absolute top-3 bottom-3 left-[13px] hidden w-[3px] bg-sidebar-foreground/45 md:block"
+        />
+        {STATIONS.map((s) => (
+          <li key={s.to} className="relative">
+            <NavLink
+              to={s.to}
+              end={s.end}
+              className={({ isActive }) =>
+                cn(
+                  'group flex items-center gap-3 rounded-sm px-1 py-2 no-underline md:py-3',
+                  isActive ? 'text-white' : 'text-sidebar-foreground hover:text-white',
+                )
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  <span
+                    aria-hidden
+                    className={cn(
+                      'relative z-10 hidden size-[19px] shrink-0 items-center justify-center rounded-full border-[3px] md:flex',
+                      isActive
+                        ? 'border-white bg-white'
+                        : 'border-sidebar-foreground/70 bg-sidebar group-hover:border-white',
+                    )}
+                  >
+                    {isActive ? <span className="size-[7px] rounded-full bg-sidebar" /> : null}
+                  </span>
+                  <span className={cn('text-sm leading-tight', isActive && 'font-semibold')}>{s.label}</span>
+                </>
+              )}
+            </NavLink>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )
+}
+
 export function AppShell() {
   const location = useLocation()
   const mainRef = useRef<HTMLElement>(null)
+  const wfs = sourceById('gugik-wfs-przejazdy')
 
   useEffect(() => {
-    mainRef.current?.focus({ preventScroll: true })
+    // Move focus to the new page's heading so screen readers announce the page.
+    const heading = mainRef.current?.querySelector<HTMLElement>('h1[tabindex="-1"]')
+    ;(heading ?? mainRef.current)?.focus({ preventScroll: true })
     window.scrollTo(0, 0)
   }, [location.pathname])
 
@@ -33,67 +83,42 @@ export function AppShell() {
       >
         Przejdź do treści
       </a>
-      <div className="grid min-h-svh grid-cols-1 md:grid-cols-[14rem_1fr]">
-        <aside className="border-sidebar-border bg-sidebar text-sidebar-foreground md:sticky md:top-0 md:h-svh md:border-r">
-          <div className="flex h-full flex-col gap-4 p-4">
-            <div className="flex flex-col gap-1">
-              <span className="text-base leading-tight font-semibold text-white">Przejazd pod kontrolą</span>
-              <span className="text-xs text-sidebar-foreground/80">
-                Wskazanie → diagnoza → środek → wdrożenie → ocena
+      <div className="grid min-h-svh grid-cols-1 md:grid-cols-[15rem_1fr]">
+        <aside className="bg-sidebar text-sidebar-foreground md:sticky md:top-0 md:h-svh">
+          <div className="flex h-full flex-col gap-6 p-4">
+            <Link to="/" className="flex items-center gap-3 no-underline">
+              <BrandMark />
+              <span className="flex flex-col leading-tight">
+                <span className="text-base font-semibold text-white">Przejazd pod kontrolą</span>
+                <span className="text-xs text-sidebar-foreground/75">prototyp konkursowy</span>
               </span>
-            </div>
-            <nav aria-label="Główna nawigacja">
-              <ul className="flex flex-row flex-wrap gap-1 md:flex-col">
-                {NAV.map((item) => (
-                  <li key={item.to}>
-                    <NavLink
-                      to={item.to}
-                      end={item.end}
-                      className={({ isActive }) =>
-                        cn(
-                          'block rounded-sm border-l-2 px-2 py-1.5 text-sm no-underline',
-                          isActive
-                            ? 'border-warning bg-sidebar-accent font-medium text-white'
-                            : 'border-transparent text-sidebar-foreground hover:bg-sidebar-accent hover:text-white',
-                        )
-                      }
-                    >
-                      {item.label}
-                    </NavLink>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-            <div className="mt-auto hidden text-xs text-sidebar-foreground/80 md:block">
-              Realne: przejazdy PKP PLK (WFS GUGiK), ruch GDDKiA GPR 2025. Fikcyjne: przypadki X1–X10.
-            </div>
+            </Link>
+            <LineNav />
+            <dl className="mt-auto hidden grid-cols-[auto_1fr] gap-x-2 gap-y-1 border-t border-sidebar-border pt-3 font-mono text-[11px] md:grid">
+              <dt className="text-sidebar-foreground/70">Realne</dt>
+              <dd>PKP PLK, GDDKiA</dd>
+              <dt className="text-sidebar-foreground/70">Fikcyjne</dt>
+              <dd>X1–X10</dd>
+              <dt className="text-sidebar-foreground/70">Stan</dt>
+              <dd>{wfs ? formatDate(wfs.retrievedAt) : '—'}</dd>
+            </dl>
           </div>
         </aside>
 
         <div className="flex min-w-0 flex-col">
-          <header className="flex items-center justify-between gap-3 border-b bg-card px-4 py-2">
-            <span className="text-xs text-muted-foreground">
-              Demonstracja dla zespołów utrzymania i bezpieczeństwa przejazdów kolejowo-drogowych
-            </span>
-            <span className="rounded-sm border border-foreground px-1.5 py-0.5 font-mono text-[11px] tracking-wide uppercase">
-              Demo — wersja konkursowa
-            </span>
-          </header>
-
           <main
             id="tresc"
             ref={mainRef}
             tabIndex={-1}
-            className="flex w-full max-w-[1600px] flex-1 flex-col gap-4 p-4 outline-none"
+            className="flex w-full max-w-[1600px] flex-1 flex-col gap-5 p-5"
           >
             <Outlet />
           </main>
 
-          <footer className="border-t bg-card px-4 py-3 text-xs text-muted-foreground">
+          <footer className="border-t bg-card px-5 py-3 text-xs text-muted-foreground">
             <p>
-              Dane realne: przejazdy kolejowo-drogowe PKP PLK (usługa WFS GUGiK, stan na 10.11.2026),
-              Generalny Pomiar Ruchu 2025 (GDDKiA). Dane o kontrolach, zdarzeniach i naruszeniach to DANE
-              FIKCYJNE. Podkład mapy ©{' '}
+              Dane realne: przejazdy kolejowo-drogowe PKP PLK (usługa WFS GUGiK), Generalny Pomiar Ruchu 2025
+              (GDDKiA). Dane o kontrolach, zdarzeniach i naruszeniach to DANE FIKCYJNE. Podkład mapy ©{' '}
               <a
                 href="https://www.openstreetmap.org/copyright"
                 target="_blank"

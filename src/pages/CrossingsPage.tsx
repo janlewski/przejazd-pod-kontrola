@@ -1,17 +1,26 @@
-import { useDeferredValue, useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router'
+import { useCallback, useDeferredValue, useMemo, useState } from 'react'
+import { Link, useSearchParams } from 'react-router'
 import { FictionalDataBanner } from '@/components/common/FictionalDataBanner'
 import { FilterSelect } from '@/components/common/FilterSelect'
 import { PageHeader } from '@/components/common/PageHeader'
 import { SourceFootnote } from '@/components/common/SourceFootnote'
-import { PriorityShape } from '@/components/common/badges'
+import {
+  CategoryBadge,
+  OriginBadge,
+  PriorityBadge,
+  PriorityShape,
+  VerificationBadge,
+} from '@/components/common/badges'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { CrossingMap } from '@/components/crossings/CrossingMap'
 import { CATEGORY_COLOR, PRIORITY_COLOR, type ColorMode } from '@/components/crossings/mapColors'
 import { CrossingsTable } from '@/components/crossings/CrossingsTable'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Input } from '@/components/ui/input'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { Label } from '@/components/ui/label'
-import { caseRows } from '@/data'
+import { caseById, caseRows } from '@/data'
 import type { Row } from '@/domain/assess'
 import { useRealData } from '@/hooks/useRealData'
 import { formatInt } from '@/lib/format'
@@ -47,7 +56,7 @@ function applyFilters(rows: Row[], f: Filters): Row[] {
     if (f.verification !== 'all' && r.assessment.verification.level !== f.verification) return false
     if (f.gpr === 'matched' && r.gpr === null) return false
     if (f.gpr === 'unmatched' && (r.gpr !== null || r.origin !== 'real')) return false
-    if (q && !normalize(`${r.name} ${r.id} ${r.unit ?? ''}`).includes(q)) return false
+    if (q && !normalize(`${r.name} ${r.id} ${r.crossingName ?? ''} ${r.unit ?? ''}`).includes(q)) return false
     return true
   })
 }
@@ -86,24 +95,40 @@ export default function CrossingsPage() {
   }
 
   const allRows = useMemo(() => [...caseRows, ...(real.data?.rows ?? [])], [real.data])
+  const selectedId = params.get('wybrany')
+  const selected = selectedId ? allRows.find((r) => r.id === selectedId) : undefined
+  const clearSelection = () =>
+    setParams(
+      (p) => {
+        p.delete('wybrany')
+        return p
+      },
+      { replace: true },
+    )
   const { origin, category, inspection, verification, gpr } = filters
   const filtered = useMemo(
     () => applyFilters(allRows, { q: deferredQuery, origin, category, inspection, verification, gpr }),
     [allRows, deferredQuery, origin, category, inspection, verification, gpr],
   )
 
+  const select = useCallback(
+    (id: string) =>
+      setParams(
+        (p) => {
+          p.set('wybrany', id)
+          return p
+        },
+        { replace: true },
+      ),
+    [setParams],
+  )
+
   return (
     <>
       <PageHeader
         title="Przejazdy"
-        description="Lista łączy realne przejazdy PKP PLK z przypadkami fikcyjnymi X1–X10. Priorytet kontroli, priorytet weryfikacji danych i ruch drogowy to trzy osobne kolumny — nie są sumowane."
+        description="Mapa i lista realnych przejazdów PKP PLK oraz przypadków fikcyjnych X1–X10. Priorytet kontroli, weryfikacja danych i ruch drogowy są osobnymi kolumnami i nie są sumowane."
       />
-
-      <FictionalDataBanner>
-        Wiersze X1–X10 (tło szare, romb na mapie) to przykłady działania z umownym położeniem. Dla realnych
-        przejazdów zbiór nie zawiera danych o kontrolach i zdarzeniach, dlatego ich priorytet kontroli to
-        „brak oceny”.
-      </FictionalDataBanner>
 
       {real.status === 'error' ? (
         <Alert variant="destructive">
@@ -115,7 +140,7 @@ export default function CrossingsPage() {
       <form
         role="search"
         aria-label="Filtry przejazdów"
-        className="flex flex-wrap items-end gap-3"
+        className="flex flex-wrap items-end gap-x-3 gap-y-2"
         onSubmit={(e) => e.preventDefault()}
       >
         <div className="flex flex-col gap-1">
@@ -137,7 +162,7 @@ export default function CrossingsPage() {
               )
             }}
             placeholder="np. 082 006 629 lub X1"
-            className="h-8 w-56 bg-card"
+            className="h-8 w-52 bg-card"
           />
         </div>
         <FilterSelect
@@ -193,86 +218,142 @@ export default function CrossingsPage() {
             { value: 'unmatched', label: 'Bez danych GPR' },
           ]}
         />
-        <FilterSelect
-          label="Kolor punktów na mapie"
-          value={colorMode}
-          onChange={setColorMode}
-          options={[
-            { value: 'priority', label: 'Priorytet kontroli' },
-            { value: 'category', label: 'Kategoria' },
-          ]}
-        />
+        <p className="ml-auto self-end pb-1.5 text-xs text-muted-foreground tabular-nums" aria-live="polite">
+          {real.status === 'loading'
+            ? 'Wczytywanie realnych przejazdów…'
+            : `${formatInt(filtered.length)} z ${formatInt(allRows.length)} pozycji`}
+        </p>
       </form>
 
-      <p className="text-xs text-muted-foreground" aria-live="polite">
-        {real.status === 'loading'
-          ? 'Wczytywanie realnych przejazdów…'
-          : `Wyświetlono ${formatInt(filtered.length)} z ${formatInt(allRows.length)} pozycji.`}{' '}
-        <SourceFootnote sourceId="gugik-wfs-przejazdy" /> · <SourceFootnote sourceId="gddkia-gpr-2025" />
-      </p>
+      <FictionalDataBanner>
+        X1–X10 (romby, szare wiersze) to zmyślone zdarzenia na realnych przejazdach: numer, położenie i
+        kategoria są prawdziwe, objawy i naruszenia nie. Pozostałe przejazdy nie mają danych o kontrolach,
+        stąd „brak oceny”.
+      </FictionalDataBanner>
 
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
-        <CrossingsTable rows={filtered} />
-        <div className="flex flex-col gap-2 xl:sticky xl:top-4 xl:self-start">
+      <div className="grid gap-3 lg:h-[max(560px,calc(100svh-19.5rem))] lg:grid-cols-[minmax(0,13fr)_minmax(0,11fr)] 2xl:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
+        <section aria-label="Mapa" className="flex min-h-0 flex-col gap-2">
           <CrossingMap
             rows={filtered}
             colorMode={colorMode}
-            className="h-[420px] xl:h-[calc(100svh-12rem)]"
+            selectedId={selectedId}
+            className="h-[55svh] min-h-[360px] lg:h-auto lg:min-h-0 lg:flex-1"
           />
-          <MapLegend colorMode={colorMode} />
+          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+            <MapLegend colorMode={colorMode} />
+            <ToggleGroup
+              type="single"
+              variant="outline"
+              size="sm"
+              aria-label="Kolor punktów na mapie"
+              value={colorMode}
+              onValueChange={(v) => v && setColorMode(v as ColorMode)}
+              className="bg-card"
+            >
+              <ToggleGroupItem
+                value="priority"
+                className="data-[state=on]:bg-foreground data-[state=on]:text-background"
+              >
+                Kolor: priorytet
+              </ToggleGroupItem>
+              <ToggleGroupItem
+                value="category"
+                className="data-[state=on]:bg-foreground data-[state=on]:text-background"
+              >
+                Kolor: kategoria
+              </ToggleGroupItem>
+            </ToggleGroup>
+          </div>
+        </section>
+
+        <div className="flex min-h-0 flex-col gap-2">
+          {selected ? <SelectedRow row={selected} onClear={clearSelection} /> : null}
+          <CrossingsTable
+            rows={filtered}
+            selectedId={selectedId}
+            onSelect={select}
+            className="h-[70svh] lg:h-auto lg:flex-1"
+          />
         </div>
       </div>
+
+      <p className="text-xs text-muted-foreground">
+        <SourceFootnote sourceId="gugik-wfs-przejazdy" />. <SourceFootnote sourceId="gddkia-gpr-2025" />.
+      </p>
     </>
+  )
+}
+
+function SelectedRow({ row, onClear }: { row: Row; onClear: () => void }) {
+  const record = row.origin === 'fictional' ? caseById(row.id) : undefined
+  return (
+    <Card
+      role="region"
+      aria-label={`Wybrany przejazd: ${row.name}`}
+      className="gap-2 border-2 border-foreground px-3 py-2.5"
+    >
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="font-semibold">{row.name}</span>
+        <OriginBadge origin={row.origin} />
+        <CategoryBadge category={row.category} />
+        <PriorityBadge level={row.assessment.inspection.level} />
+        <VerificationBadge level={row.assessment.verification.level} />
+      </div>
+      <p className="text-sm text-muted-foreground">
+        {record?.summary ?? row.unit ?? 'Przejazd z danych WFS.'}
+      </p>
+      <div className="flex flex-wrap items-center gap-2">
+        <Button asChild size="sm" className="rounded-sm">
+          <Link to={`/przejazdy/${encodeURIComponent(row.id)}`}>Otwórz kartę przejazdu</Link>
+        </Button>
+        <Button variant="ghost" size="sm" onClick={onClear}>
+          Usuń zaznaczenie
+        </Button>
+      </div>
+    </Card>
+  )
+}
+
+function Dot({ fill }: { fill: string }) {
+  return (
+    <svg width="10" height="10" aria-hidden>
+      <circle cx="5" cy="5" r="4" fill={fill} stroke="#1F2328" />
+    </svg>
   )
 }
 
 function MapLegend({ colorMode }: { colorMode: ColorMode }) {
   return (
-    <div className="flex flex-col gap-1.5 text-xs" aria-label="Legenda mapy">
-      <div className="flex flex-wrap gap-x-4 gap-y-1">
-        <span className="inline-flex items-center gap-1.5">
-          <svg width="10" height="10" aria-hidden>
-            <circle cx="5" cy="5" r="4" fill="#B9BAB4" stroke="#1F2328" />
-          </svg>
-          Koło — przejazd realny
-        </span>
-        <span className="inline-flex items-center gap-1.5">
-          <svg width="12" height="12" aria-hidden>
-            <path d="M6 1 11 6 6 11 1 6Z" fill="#fff" stroke="#1F2328" strokeDasharray="2 1.5" />
-          </svg>
-          Romb z kreskowaną ramką — DANE FIKCYJNE (położenie umowne)
-        </span>
-      </div>
-      <div className="flex flex-wrap gap-x-4 gap-y-1">
-        {colorMode === 'priority'
-          ? (['P1', 'P2', 'P3'] as const).map((p) => (
-              <span key={p} className="inline-flex items-center gap-1.5">
-                <span style={{ color: PRIORITY_COLOR[p] }}>
-                  <PriorityShape level={p} />
-                </span>
-                {p}
+    <ul className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs" aria-label="Legenda mapy">
+      <li className="inline-flex items-center gap-1.5">
+        <svg width="12" height="12" aria-hidden>
+          <path d="M6 1 11 6 6 11 1 6Z" fill="#fff" stroke="#1F2328" strokeDasharray="2 1.5" />
+        </svg>
+        DANE FIKCYJNE
+      </li>
+      {colorMode === 'priority' ? (
+        <>
+          {(['P1', 'P2', 'P3'] as const).map((p) => (
+            <li key={p} className="inline-flex items-center gap-1.5">
+              <span style={{ color: PRIORITY_COLOR[p] }}>
+                <PriorityShape level={p} />
               </span>
-            ))
-          : (['A', 'B', 'C', 'D', 'E', 'F'] as const).map((c) => (
-              <span key={c} className="inline-flex items-center gap-1.5">
-                <svg width="10" height="10" aria-hidden>
-                  <circle cx="5" cy="5" r="4" fill={CATEGORY_COLOR[c]} stroke="#1F2328" />
-                </svg>
-                Kat. {c}
-              </span>
-            ))}
-        {colorMode === 'priority' ? (
-          <span className="inline-flex items-center gap-1.5">
-            <svg width="10" height="10" aria-hidden>
-              <circle cx="5" cy="5" r="4" fill={PRIORITY_COLOR.none} stroke="#1F2328" />
-            </svg>
-            Brak oceny (realne przejazdy)
-          </span>
-        ) : null}
-      </div>
-      <p className="text-muted-foreground">
-        Kolor fikcyjnych rombów zawsze oznacza priorytet kontroli. Mapa pokazuje te same pozycje co tabela.
-      </p>
-    </div>
+              {p}
+            </li>
+          ))}
+          <li className="inline-flex items-center gap-1.5">
+            <Dot fill={PRIORITY_COLOR.none} />
+            realny, brak oceny
+          </li>
+        </>
+      ) : (
+        (['A', 'B', 'C', 'D', 'E', 'F'] as const).map((c) => (
+          <li key={c} className="inline-flex items-center gap-1.5">
+            <Dot fill={CATEGORY_COLOR[c]} />
+            Kat. {c}
+          </li>
+        ))
+      )}
+    </ul>
   )
 }
