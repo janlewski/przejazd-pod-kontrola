@@ -76,25 +76,20 @@ export default function LandingPage() {
   return (
     <div className="min-h-svh bg-background text-foreground">
       <header className="border-b bg-card">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-3">
-          <div className="flex items-center gap-3">
-            <BrandMark size={28} inverted />
-            <p className="text-sm">
-              Prototyp na konkurs {PROJECT.contest}{' '}
-              <span className="text-muted-foreground">({PROJECT.contestOrganizer})</span>
-            </p>
-          </div>
-          <a href={PROJECT.repoUrl} target="_blank" rel="noreferrer" className="text-sm">
-            Kod źródłowy na GitHubie
-          </a>
+        <div className="mx-auto flex max-w-6xl items-center gap-3 px-5 py-3">
+          <BrandMark size={28} inverted />
+          <p className="text-sm">
+            Prototyp na konkurs {PROJECT.contest}{' '}
+            <span className="text-muted-foreground">({PROJECT.contestOrganizer})</span>
+          </p>
         </div>
       </header>
 
       <main>
-        <section className="mx-auto grid max-w-6xl items-center gap-10 px-5 py-10 lg:min-h-[calc(100svh-3.5rem)] lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:py-12">
-          <div className="flex flex-col gap-6">
+        <section className="mx-auto grid max-w-6xl items-center gap-8 px-5 py-7 lg:min-h-[calc(100svh-3.5rem)] lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:py-12">
+          <div className="flex flex-col gap-5 sm:gap-6">
             <div className="flex flex-col gap-3">
-              <h1 className="text-[clamp(2.5rem,5.5vw,4.5rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-balance">
+              <h1 className="text-[clamp(2.25rem,5.5vw,4.5rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-balance">
                 {PROJECT.name}
               </h1>
               <p className="text-xl text-muted-foreground">
@@ -105,7 +100,7 @@ export default function LandingPage() {
             <TrackRule className="max-w-xl" />
 
             <div className="flex max-w-[62ch] flex-col gap-3">
-              <p className="text-lg leading-relaxed">
+              <p className="text-base leading-relaxed sm:text-lg">
                 W latach {UTK.years} doszło do{' '}
                 <strong className="font-semibold tabular-nums">{formatInt(UTK.total)}</strong> incydentów z
                 winy użytkowników przejazdów i przejść.{' '}
@@ -118,11 +113,6 @@ export default function LandingPage() {
                   UTK, Raport w sprawie bezpieczeństwa za 2025
                 </a>
                 , s. {UTK.page}, incydenty kategorii {UTK.incidentCategories}.
-              </p>
-              <p className="leading-relaxed">
-                Takie zdarzenia układają się w powtarzalne wzorce. Aplikacja pomaga wskazać przejazdy do
-                kontroli, rozpoznać wzorzec, dobrać środek z udokumentowanym dowodem i sprawdzić, czy
-                zadziałał.
               </p>
             </div>
 
@@ -143,6 +133,11 @@ export default function LandingPage() {
                 fikcyjne.
               </p>
             </div>
+
+            <p className="max-w-[62ch] leading-relaxed">
+              Takie zdarzenia układają się w powtarzalne wzorce. Aplikacja pomaga wskazać przejazdy do
+              kontroli, rozpoznać wzorzec, dobrać środek z udokumentowanym dowodem i sprawdzić, czy zadziałał.
+            </p>
           </div>
 
           <figure className="flex flex-col gap-3">
@@ -161,7 +156,7 @@ export default function LandingPage() {
         </section>
 
         <div className="border-t bg-card">
-          <div className="mx-auto flex max-w-6xl flex-col gap-14 px-5 py-14">
+          <div className="mx-auto flex max-w-6xl flex-col gap-12 px-5 py-10 md:gap-14 md:py-14">
             <section aria-labelledby="jak-to-dziala" className="flex flex-col gap-8">
               <h2
                 id="jak-to-dziala"
@@ -266,7 +261,7 @@ export default function LandingPage() {
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-5 text-sm text-muted-foreground">
           <span>{PROJECT.authors.join(', ')}</span>
           <a href={PROJECT.repoUrl} target="_blank" rel="noreferrer">
-            {PROJECT.repoUrl.replace('https://', '')}
+            GitHub
           </a>
           <span>Stan danych: {wfs ? formatDate(wfs.retrievedAt) : 'brak'}</span>
           <span>Kod na licencji MIT</span>

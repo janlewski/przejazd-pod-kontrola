@@ -138,6 +138,10 @@
     outline: 2px solid var(--rail-navy);
     outline-offset: 2px;
   }
+  /* Programmatic focus targets (headings, <main>) are not in the tab order: no ring. */
+  [tabindex='-1']:focus {
+    outline: none;
+  }
   a {
     @apply text-navy underline decoration-1 underline-offset-2;
   }

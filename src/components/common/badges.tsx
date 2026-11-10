@@ -46,13 +46,20 @@ export function PriorityShape({ level, size = 10 }: { level: InspectionLevel | n
   )
 }
 
-export function PriorityBadge({ level }: { level: InspectionLevel | null }) {
+/** `compact`: on narrow screens "brak oceny" collapses to its dash glyph (label stays for AT). */
+export function PriorityBadge({
+  level,
+  compact = false,
+}: {
+  level: InspectionLevel | null
+  compact?: boolean
+}) {
   const variant = level === null ? 'unassessed' : (level.toLowerCase() as 'p1' | 'p2' | 'p3')
   const label = level === null ? NOT_ASSESSED_LABEL : INSPECTION_LABEL[level]
   return (
     <Badge variant={variant} title={label}>
       <PriorityShape level={level} />
-      {level ?? 'brak oceny'}
+      {level ?? <span className={compact ? 'hidden sm:inline' : undefined}>brak oceny</span>}
       <span className="sr-only"> — {label}</span>
     </Badge>
   )

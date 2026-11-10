@@ -21,6 +21,9 @@ import { GPR_CONFIDENCE_LABEL } from '@/lib/labels'
 import { cn } from '@/lib/utils'
 
 const PAGE_SIZE = 20
+/** Columns left out on narrow screens; the crossing card shows the same data. */
+const HIDE_ON_MOBILE = new Set(['aadt'])
+const responsive = (id: string) => (HIDE_ON_MOBILE.has(id) ? 'hidden sm:table-cell' : undefined)
 const V_RANK = { V1: 1, V2: 2, V3: 3 } as const
 
 function roadAadt(row: Row): number | null {
@@ -61,7 +64,7 @@ function buildColumns(onSelect: (id: string) => void): ColumnDef<Row>[] {
       id: 'inspection',
       header: 'Kontrola',
       accessorFn: (r) => inspectionSortKey(r.assessment.inspection.level),
-      cell: ({ row: { original: r } }) => <PriorityBadge level={r.assessment.inspection.level} />,
+      cell: ({ row: { original: r } }) => <PriorityBadge level={r.assessment.inspection.level} compact />,
     },
     {
       id: 'verification',
@@ -115,6 +118,7 @@ function buildColumns(onSelect: (id: string) => void): ColumnDef<Row>[] {
         <Button
           variant="ghost"
           size="icon-xs"
+          className="size-10 sm:size-6"
           onClick={() => onSelect(r.id)}
           aria-label={`Pokaż ${r.name} na mapie`}
           title="Pokaż na mapie"
@@ -174,7 +178,10 @@ export function CrossingsTable({
                   const sorted = header.column.getIsSorted()
                   if (!header.column.getCanSort()) {
                     return (
-                      <TableHead key={header.id} className="w-8 px-1.5">
+                      <TableHead
+                        key={header.id}
+                        className={cn('w-8 px-1 sm:px-1.5', responsive(header.column.id))}
+                      >
                         {flexRender(header.column.columnDef.header, header.getContext())}
                       </TableHead>
                     )
@@ -182,13 +189,13 @@ export function CrossingsTable({
                   return (
                     <TableHead
                       key={header.id}
-                      className="px-1.5"
+                      className={cn('px-1 sm:px-1.5', responsive(header.column.id))}
                       aria-sort={sorted === 'asc' ? 'ascending' : sorted === 'desc' ? 'descending' : 'none'}
                     >
                       <button
                         type="button"
                         onClick={header.column.getToggleSortingHandler()}
-                        className="inline-flex items-center gap-1 hover:underline"
+                        className="inline-flex min-h-8 items-center gap-1 hover:underline"
                       >
                         {flexRender(header.column.columnDef.header, header.getContext())}
                         <span aria-hidden className="text-muted-foreground">
@@ -223,7 +230,10 @@ export function CrossingsTable({
                   )}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="px-1.5 py-1.5 align-top">
+                    <TableCell
+                      key={cell.id}
+                      className={cn('px-1 py-1.5 align-top sm:px-1.5', responsive(cell.column.id))}
+                    >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
@@ -241,6 +251,7 @@ export function CrossingsTable({
           <Button
             variant="outline"
             size="xs"
+            className="h-9 px-3 sm:h-6 sm:px-2"
             onClick={() => table.firstPage()}
             disabled={!table.getCanPreviousPage()}
           >
@@ -249,6 +260,7 @@ export function CrossingsTable({
           <Button
             variant="outline"
             size="xs"
+            className="h-9 px-3 sm:h-6 sm:px-2"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
@@ -257,6 +269,7 @@ export function CrossingsTable({
           <Button
             variant="outline"
             size="xs"
+            className="h-9 px-3 sm:h-6 sm:px-2"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
@@ -265,6 +278,7 @@ export function CrossingsTable({
           <Button
             variant="outline"
             size="xs"
+            className="h-9 px-3 sm:h-6 sm:px-2"
             onClick={() => table.lastPage()}
             disabled={!table.getCanNextPage()}
           >

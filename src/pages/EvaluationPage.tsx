@@ -35,7 +35,7 @@ export default function EvaluationPage() {
         <p className="text-sm text-muted-foreground">Brak wdrożonych środków z danymi do oceny.</p>
       ) : (
         <Tabs value={selected} onValueChange={setSelected} className="gap-3">
-          <TabsList variant="line" className="w-full justify-start border-b">
+          <TabsList variant="line" className="h-11! w-full justify-start overflow-x-auto border-b md:h-9!">
             {evaluated.map((c) => (
               <TabsTrigger
                 key={c.id}
