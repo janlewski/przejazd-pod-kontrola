@@ -30,6 +30,7 @@ export default function CountermeasuresPage() {
   return (
     <>
       <PageHeader
+        station="03"
         title="Środki zaradcze"
         description="Katalog środków z siłą dowodu, efektem według źródła, podmiotem odpowiedzialnym, orientacyjną klasą kosztu i odniesieniem do Dz.U. 2025 poz. 1105. Wartości z USA to dowód zagraniczny."
       />

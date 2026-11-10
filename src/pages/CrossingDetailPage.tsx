@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react'
 import { Link, useParams } from 'react-router'
 import { FictionalDataBanner } from '@/components/common/FictionalDataBanner'
+import { KmPlate } from '@/components/common/KmPlate'
+import { Separator } from '@/components/ui/separator'
 import { PageHeader } from '@/components/common/PageHeader'
 import { SourceFootnote, SourceLink } from '@/components/common/SourceFootnote'
 import { CategoryBadge, OriginBadge, PriorityBadge, VerificationBadge } from '@/components/common/badges'
@@ -68,11 +70,22 @@ function Detail({ row, record }: { row: Row; record: FictionalCase | null }) {
   return (
     <>
       <PageHeader
+        station="02"
         title={isFictional ? row.name : `Przejazd ${row.name}`}
-        description={
-          isFictional
-            ? record.summary
-            : [parsed ? `Linia ${parsed.line}, km ${parsed.km}` : null, row.unit].filter(Boolean).join(' · ')
+        description={isFictional ? record.summary : (row.unit ?? undefined)}
+        meta={
+          <>
+            {parsed ? <KmPlate name={row.name} /> : null}
+            <OriginBadge origin={row.origin} />
+            <Separator orientation="vertical" className="h-4!" />
+            <CategoryBadge category={row.category} />
+            <span className="text-xs text-muted-foreground">
+              {row.category ? CATEGORY_LABEL[row.category] : 'Brak kategorii'}
+            </span>
+            <Separator orientation="vertical" className="h-4!" />
+            <PriorityBadge level={row.assessment.inspection.level} />
+            <VerificationBadge level={row.assessment.verification.level} />
+          </>
         }
         actions={
           <Link to="/przejazdy" className="text-sm">
@@ -81,19 +94,6 @@ function Detail({ row, record }: { row: Row; record: FictionalCase | null }) {
         }
       />
       {isFictional ? <FictionalDataBanner /> : null}
-
-      <div className="flex flex-wrap items-center gap-2 text-sm">
-        <OriginBadge origin={row.origin} />
-        <CategoryBadge category={row.category} />
-        <span className="text-muted-foreground">
-          {row.category ? CATEGORY_LABEL[row.category] : 'Brak kategorii'}
-        </span>
-        <span aria-hidden className="text-muted-foreground">
-          ·
-        </span>
-        <PriorityBadge level={row.assessment.inspection.level} />
-        <VerificationBadge level={row.assessment.verification.level} />
-      </div>
 
       <Tabs defaultValue="priorytet" className="gap-3">
         <TabsList variant="line" className="w-full justify-start border-b">
@@ -322,7 +322,7 @@ function RealData({ row }: { row: Row }) {
 function FictionalData({ record }: { record: FictionalCase }) {
   return (
     <div className="grid gap-3 lg:grid-cols-2">
-      <section className="fictional-frame flex flex-col gap-2 rounded-sm bg-card p-3">
+      <section className="fictional-stamp flex flex-col gap-2 rounded-sm bg-card p-3 pt-4">
         <h2 className="text-sm font-semibold">Dane przypadku (fikcyjne)</h2>
         <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
           <Field label="Pochodzenie">DANE FIKCYJNE — origin: fictional</Field>
@@ -342,7 +342,7 @@ function FictionalData({ record }: { record: FictionalCase }) {
           </Field>
         </dl>
       </section>
-      <section className="fictional-frame flex flex-col gap-2 rounded-sm bg-card p-3">
+      <section className="fictional-stamp flex flex-col gap-2 rounded-sm bg-card p-3 pt-4">
         <h2 className="text-sm font-semibold">Naruszenia (fikcyjne)</h2>
         {record.violations.length === 0 ? (
           <p className="text-sm text-muted-foreground">Brak zarejestrowanych pomiarów naruszeń.</p>
