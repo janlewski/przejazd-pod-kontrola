@@ -1,7 +1,7 @@
 [
   {
-    "kind": "document",
     "id": "cfr-49-222-app-a",
+    "kind": "document",
     "title": "49 CFR Part 222, Appendix A — Approved Supplementary Safety Measures",
     "shortTitle": "49 CFR 222 App. A",
     "publisher": "Federal Railroad Administration (USA); tekst: Legal Information Institute, Cornell Law School",
@@ -11,8 +11,8 @@
     "processing": "Przepisane współczynniki skuteczności środków (USA, kontekst stref ciszy); bez przetwarzania."
   },
   {
-    "kind": "dataset",
     "id": "derived-gpr-match",
+    "kind": "dataset",
     "title": "Dopasowanie przejazdów do odcinków GPR 2025 (dane pochodne)",
     "shortTitle": "dopasowanie GPR (opracowanie własne)",
     "publisher": "Opracowanie własne na podstawie gugik-wfs-przejazdy i gddkia-gpr-2025",
@@ -23,8 +23,8 @@
     "records": 352
   },
   {
-    "kind": "document",
     "id": "dzu-2025-1105",
+    "kind": "document",
     "title": "Rozporządzenie Ministra Infrastruktury z dnia 9 lipca 2025 r. w sprawie warunków technicznych, jakim powinny odpowiadać skrzyżowania linii kolejowych oraz bocznic kolejowych z drogami i ich usytuowanie (Dz.U. 2025 poz. 1105)",
     "shortTitle": "Dz.U. 2025 poz. 1105",
     "publisher": "Minister Infrastruktury",
@@ -34,8 +34,8 @@
     "processing": "Progi iloczynu ruchu (§8–§10, §13), częstotliwość pomiarów (zał. nr 1 pkt 1–2, 9–10) i odniesienia do §21, §22, §24, §26, §73 przepisane z tekstu aktu."
   },
   {
-    "kind": "document",
     "id": "fhwa-cmf-494",
+    "kind": "document",
     "title": "CMF Clearinghouse, CMF ID 494 — instalacja rogatek przy istniejącej sygnalizacji świetlnej i dźwiękowej",
     "shortTitle": "CMF Clearinghouse, ID 494",
     "publisher": "Federal Highway Administration (USA)",
@@ -45,8 +45,8 @@
     "processing": "Przepisana wartość CMF z kontekstem badania; bez przetwarzania."
   },
   {
-    "kind": "dataset",
     "id": "gddkia-gpr-2025",
+    "kind": "dataset",
     "title": "Generalny Pomiar Ruchu 2025 — średni dobowy ruch roczny (SDRR) na drogach krajowych, warstwa SHP",
     "shortTitle": "GDDKiA, GPR 2025",
     "publisher": "Generalna Dyrekcja Dróg Krajowych i Autostrad",
@@ -57,8 +57,8 @@
     "records": 2422
   },
   {
-    "kind": "document",
     "id": "gov-112-przejazdy",
+    "kind": "document",
     "title": "Przejazdy kolejowo-drogowe — numer alarmowy 112 (żółta naklejka PLK)",
     "shortTitle": "gov.pl — numer alarmowy 112",
     "publisher": "Portal Gov.pl — Numer alarmowy 112",
@@ -68,8 +68,8 @@
     "processing": "Opis żółtej naklejki: 9-cyfrowy numer identyfikacyjny przejazdu tworzą numer linii i kilometr linii. Wykorzystane do odczytu linii i kilometra z pola NAZWA."
   },
   {
-    "kind": "dataset",
     "id": "gugik-wfs-przejazdy",
+    "kind": "dataset",
     "title": "Przejazdy kolejowo-drogowe PKP PLK (usługa WFS, warstwa ms:PKP_PLK)",
     "shortTitle": "WFS GUGiK / PKP PLK",
     "publisher": "Główny Urząd Geodezji i Kartografii / PKP Polskie Linie Kolejowe S.A.",
@@ -80,8 +80,8 @@
     "records": 11728
   },
   {
-    "kind": "document",
     "id": "kolejowyportal-redlight",
+    "kind": "document",
     "title": "Kolejne przejazdy pod nadzorem Red Light. PKP PLK wskazują kryteria wyboru",
     "shortTitle": "Kolejowy Portal",
     "publisher": "Kolejowy Portal",
@@ -91,8 +91,8 @@
     "processing": "Przepisane dane o liczbie systemów i zarejestrowanych naruszeń w 2024 r.; bez przetwarzania."
   },
   {
-    "kind": "document",
     "id": "ntsb-rar-17-01",
+    "kind": "document",
     "title": "NTSB Railroad Accident Report RAR-17/01",
     "shortTitle": "NTSB RAR-17/01",
     "publisher": "National Transportation Safety Board (USA)",
@@ -102,8 +102,8 @@
     "processing": "Odniesienie do mechanizmu (kolejka sięgająca torów, koordynacja z sygnalizacją drogową); bez wartości liczbowych."
   },
   {
-    "kind": "document",
     "id": "orr-mcb-od",
+    "kind": "document",
     "title": "Level crossing template — Manually Controlled Barriers with Obstacle Detection (MCB-OD)",
     "shortTitle": "ORR — MCB-OD",
     "publisher": "Office of Rail and Road (Wielka Brytania)",
@@ -113,8 +113,8 @@
     "processing": "Odniesienie do typu przejazdu z detekcją przeszkód; bez wartości liczbowych."
   },
   {
-    "kind": "dataset",
     "id": "osm-tiles",
+    "kind": "dataset",
     "title": "Podkład mapowy OpenStreetMap (kafle standardowe)",
     "shortTitle": "OpenStreetMap",
     "publisher": "OpenStreetMap Foundation; © OpenStreetMap contributors",
@@ -124,8 +124,8 @@
     "processing": "Kafle pobierane przez przeglądarkę wyłącznie podczas przeglądania mapy; bez prefetchu, zapisu i trybu offline. Atrybucja widoczna na mapie."
   },
   {
-    "kind": "dataset",
     "id": "osm-weryfikacja-polozenia",
+    "kind": "dataset",
     "title": "Weryfikacja reprojekcji: węzły railway=level_crossing w OpenStreetMap (Overpass API)",
     "shortTitle": "OpenStreetMap (weryfikacja)",
     "publisher": "© OpenStreetMap contributors",
@@ -135,8 +135,8 @@
     "processing": "Jednorazowe zapytanie o 4 przejazdy po tagu ref (numer z żółtej naklejki). Różnica położenia po reprojekcji ≤ 2 m; współrzędne kontrolne zapisane w tests/geo.test.ts. Dane OSM nie są dołączone do aplikacji."
   },
   {
-    "kind": "document",
     "id": "pkbwk-raport-2024",
+    "kind": "document",
     "title": "Państwowa Komisja Badania Wypadków Kolejowych — Raport roczny 2024",
     "shortTitle": "PKBWK, raport roczny 2024",
     "publisher": "Państwowa Komisja Badania Wypadków Kolejowych",
@@ -146,8 +146,8 @@
     "processing": "Lista przyczyn zdarzeń na przejazdach jako punkt wyjścia do wzorców diagnozy; bez przetwarzania danych liczbowych."
   },
   {
-    "kind": "document",
     "id": "railengineer-od",
+    "kind": "document",
     "title": "Obstacle detection for level crossings",
     "shortTitle": "Rail Engineer",
     "publisher": "Rail Engineer (Wielka Brytania)",
@@ -157,8 +157,8 @@
     "processing": "Opis działania detekcji przeszkód (radar, LiDAR) na przejazdach Network Rail; bez wartości liczbowych."
   },
   {
-    "kind": "document",
     "id": "txdot-quiet-zones",
+    "kind": "document",
     "title": "Rail-Highway Operations Manual — Approving Quiet Zones",
     "shortTitle": "TxDOT — Quiet Zones",
     "publisher": "Texas Department of Transportation",
@@ -168,8 +168,8 @@
     "processing": "Potwierdzenie współczynników skuteczności separatorów (FRA); bez przetwarzania."
   },
   {
-    "kind": "document",
     "id": "utk-raport-2025",
+    "kind": "document",
     "title": "Urząd Transportu Kolejowego — Raport w sprawie bezpieczeństwa za 2025",
     "shortTitle": "UTK, raport za 2025",
     "publisher": "Urząd Transportu Kolejowego",

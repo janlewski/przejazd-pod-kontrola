@@ -10,9 +10,10 @@ import path from 'node:path'
 import { z } from 'zod'
 import { GPR_EXCLUDED_ROAD_PREFIX, GPR_MATCH_HIGH_M, GPR_MATCH_MAX_M } from '../src/config/gpr.ts'
 import { Crossing, GprMatch } from '../src/domain/schemas.ts'
+import { SOURCE_ID as CROSSINGS_SOURCE_ID } from './fetch-crossings.ts'
 import { pointToPolylinesDistanceM } from './lib/geo.ts'
-import { ROOT, isMain, todayIso, upsertSource } from './lib/sources.ts'
 import { GPR_SEGMENTS_PATH, GPR_SOURCE_ID, GprSegment } from './lib/gpr.ts'
+import { ROOT, isMain, sourceRetrievedAt, upsertSource } from './lib/sources.ts'
 
 const OUTPUT = path.join(ROOT, 'src/data/gpr-match.json')
 export const MATCH_SOURCE_ID = 'derived-gpr-match'
@@ -127,7 +128,8 @@ function main() {
     shortTitle: 'dopasowanie GPR (opracowanie własne)',
     publisher: 'Opracowanie własne na podstawie gugik-wfs-przejazdy i gddkia-gpr-2025',
     url: 'https://github.com/janlewski/przejazd-pod-kontrola/blob/main/scripts/match-gpr.ts',
-    retrievedAt: todayIso(),
+    // Derived data is dated by its newest input, so rebuilding from snapshots is reproducible.
+    retrievedAt: [sourceRetrievedAt(CROSSINGS_SOURCE_ID), sourceRetrievedAt(GPR_SOURCE_ID)].sort().at(-1)!,
     license: 'Dane pochodne — warunki jak dla danych źródłowych.',
     processing: [
       `Najbliższy odcinek GPR (bez autostrad i dróg ekspresowych — brak przejazdów w poziomie szyn) w promieniu ${GPR_MATCH_MAX_M} m.`,

@@ -20,6 +20,13 @@ export function upsertSource(entry: z.infer<typeof SourceRef>): void {
   writeJson(SOURCES_PATH, next)
 }
 
+export function sourceRetrievedAt(id: string): string {
+  const sources = SourcesFile.parse(JSON.parse(fs.readFileSync(SOURCES_PATH, 'utf8')))
+  const found = sources.find((s) => s.id === id)
+  if (!found) throw new Error(`Brak źródła ${id} w sources.json`)
+  return found.retrievedAt
+}
+
 export function writeJson(file: string, data: unknown): void {
   fs.mkdirSync(path.dirname(file), { recursive: true })
   fs.writeFileSync(file, JSON.stringify(data, null, 2) + '\n')
