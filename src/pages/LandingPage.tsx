@@ -78,10 +78,7 @@ export default function LandingPage() {
       <header className="border-b bg-card">
         <div className="mx-auto flex max-w-6xl items-center gap-3 px-5 py-3">
           <BrandMark size={28} inverted />
-          <p className="text-sm">
-            Prototyp na konkurs {PROJECT.contest}{' '}
-            <span className="text-muted-foreground">({PROJECT.contestOrganizer})</span>
-          </p>
+          <p className="text-sm font-semibold">{PROJECT.name}</p>
         </div>
       </header>
 

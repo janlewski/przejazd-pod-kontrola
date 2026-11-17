@@ -72,11 +72,8 @@ function Brand({ compact = false }: { compact?: boolean }) {
   return (
     <Link to="/" className="flex items-center gap-3 no-underline">
       <BrandMark size={compact ? 28 : 36} />
-      <span className="flex flex-col leading-tight">
-        <span className={cn('font-semibold text-white', compact ? 'text-sm' : 'text-base')}>
-          Przejazd pod kontrolą
-        </span>
-        <span className="text-xs text-sidebar-foreground/75">prototyp konkursowy</span>
+      <span className={cn('leading-tight font-semibold text-white', compact ? 'text-sm' : 'text-base')}>
+        Przejazd pod kontrolą
       </span>
     </Link>
   )

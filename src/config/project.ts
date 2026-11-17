@@ -1,8 +1,6 @@
 export const PROJECT = {
   name: 'Przejazd pod kontrolą',
   tagline: 'od diagnozy do sprawdzonej poprawy bezpieczeństwa',
-  contest: '„Kolej na bezpieczeństwo”',
-  contestOrganizer: 'PKP Polskie Linie Kolejowe S.A.',
   authors: ['Jan Lewandowski'],
   university: 'Politechnika Wrocławska',
   repoUrl: 'https://github.com/janlewski/przejazd-pod-kontrola',
