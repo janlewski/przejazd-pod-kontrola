@@ -12,6 +12,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 import { Toaster } from '@/components/ui/sonner'
+import { PROJECT } from '@/config/project'
 import { sourceById } from '@/data'
 import { formatDate } from '@/lib/format'
 import { cn } from '@/lib/utils'
@@ -71,11 +72,8 @@ function Brand({ compact = false }: { compact?: boolean }) {
   return (
     <Link to="/" className="flex items-center gap-3 no-underline">
       <BrandMark size={compact ? 28 : 36} />
-      <span className="flex flex-col leading-tight">
-        <span className={cn('font-semibold text-white', compact ? 'text-sm' : 'text-base')}>
-          Przejazd pod kontrolą
-        </span>
-        <span className="text-xs text-sidebar-foreground/75">prototyp konkursowy</span>
+      <span className={cn('leading-tight font-semibold text-white', compact ? 'text-sm' : 'text-base')}>
+        Przejazd pod kontrolą
       </span>
     </Link>
   )
@@ -164,6 +162,9 @@ export function AppShell() {
 
           <footer className="border-t bg-card px-4 py-3 text-xs text-muted-foreground md:px-5">
             <p>
+              {PROJECT.authors.join(', ')}, {PROJECT.university}.
+            </p>
+            <p className="mt-1">
               Dane realne: przejazdy kolejowo-drogowe PKP PLK (usługa WFS GUGiK), Generalny Pomiar Ruchu 2025
               (GDDKiA). Dane o kontrolach, zdarzeniach i naruszeniach to DANE FIKCYJNE. Podkład mapy ©{' '}
               <a

@@ -52,7 +52,7 @@
     "publisher": "Generalna Dyrekcja Dróg Krajowych i Autostrad",
     "url": "https://www.gov.pl/attachment/7f8ca805-e384-4802-bf10-d36538e6ef84",
     "retrievedAt": "2026-11-10",
-    "license": "Warunki nieopublikowane przy pliku — dane publiczne, wykorzystane z podaniem źródła (do weryfikacji przed publikacją).",
+    "license": "Warunki nieopublikowane przy źródle — dane publiczne, wykorzystane z podaniem źródła.",
     "processing": "Surowy plik ZIP w data/raw/gpr2025-20261110.zip. Odczyt shpjs, reprojekcja ETRS89 / Poland CS92 (EPSG:2180) → WGS84 wg pliku .prj. Zachowane pola: ID, NRDROGI, NAZWA_ODC, SDRR2025. Warstwa obejmuje tylko drogi krajowe; geometria odcinków jest uproszczona (zwykle 2 wierzchołki).",
     "records": 2422
   },
@@ -75,7 +75,7 @@
     "publisher": "Główny Urząd Geodezji i Kartografii / PKP Polskie Linie Kolejowe S.A.",
     "url": "https://mapy.geoportal.gov.pl/wss/service/wfs/sdi/Przejazdy?SERVICE=WFS&REQUEST=GetCapabilities",
     "retrievedAt": "2026-11-10",
-    "license": "Warunki nieopublikowane w opisie usługi — dane publiczne, wykorzystane z podaniem źródła (do weryfikacji przed publikacją).",
+    "license": "Warunki nieopublikowane przy źródle — dane publiczne, wykorzystane z podaniem źródła.",
     "processing": "WFS 2.0.0 GetFeature, GML 3.2, paginacja COUNT=1000/STARTINDEX; surowy snapshot w data/raw/crossings-20261110. Reprojekcja EPSG:2180 → EPSG:4326 (proj4), kolejność osi northing, easting wg urn:ogc:def:crs:EPSG::2180, kontrola regionalna (PLK Lublin na wschodzie, PLK Szczecin na zachodzie). Zachowane pola: gml:id, NAZWA (numer przejazdu), KATEGORIA, STAC_SZLAK, IDDE. Pełny zasięg warstwy.",
     "records": 11728
   },
@@ -104,13 +104,13 @@
   {
     "id": "orr-mcb-od",
     "kind": "document",
-    "title": "Level crossing template — Manually Controlled Barriers with Obstacle Detection (MCB-OD)",
-    "shortTitle": "ORR — MCB-OD",
+    "title": "Level crossing order template — Manually Controlled Barrier crossings (wariant MCB-OD)",
+    "shortTitle": "ORR — szablon MCB-OD",
     "publisher": "Office of Rail and Road (Wielka Brytania)",
-    "url": "https://www.orr.gov.uk/media/11793",
-    "retrievedAt": "2026-11-10",
+    "url": "https://www.orr.gov.uk/sites/default/files/2026-05/manually-controlled-barrier-lx-order-template.docx",
+    "retrievedAt": "2026-11-17",
     "license": "Publikacja urzędowa (Open Government Licence, do weryfikacji).",
-    "processing": "Odniesienie do typu przejazdu z detekcją przeszkód; bez wartości liczbowych."
+    "processing": "Adres /media/11793 przekierowuje na stronę główną ORR. Aktualny szablon (maj 2026) jest na liście https://www.orr.gov.uk/guidance-compliance/rail/health-safety/level-crossings/orders. Wariant MCB-OD: system detekcji przeszkód sprawdza użytkowników drogi i przeszkody przy opuszczaniu rogatek. Bez wartości liczbowych."
   },
   {
     "id": "osm-tiles",
