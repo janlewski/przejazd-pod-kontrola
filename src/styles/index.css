@@ -203,6 +203,85 @@
   }
 }
 
+/*
+ * Train geometry matches TrainConsist: 470×18 on the 480×360 diagram.
+ * Upper track centre y=156 (top 147), lower track centre y=204 (top 195).
+ * Movement, the barrier and the warning window are driven from CrossingSchematic
+ * so the gap between passes can be random.
+ */
+.crossing-train {
+  position: absolute;
+  width: calc(470 / 480 * 100%);
+  height: calc(18 / 360 * 100%);
+  top: calc(147 / 360 * 100%);
+  left: calc(470 / 480 * -100%);
+  pointer-events: none;
+}
+
+.crossing-train-lower {
+  top: calc(195 / 360 * 100%);
+  left: 100%;
+}
+
+/* In plan, a raised barrier stands upright, so it foreshortens to a stub at the pivot. */
+.crossing-boom {
+  transform-box: fill-box;
+  transform-origin: left center;
+  transform: scaleX(0.14);
+}
+
+.crossing-lamps {
+  opacity: 0;
+}
+
+.crossing-schematic[data-warning='on'] .crossing-lamps {
+  opacity: 1;
+}
+
+.crossing-lamp {
+  fill: var(--rail-signal);
+}
+
+.crossing-lamp-top,
+.crossing-lamp-bottom {
+  animation: crossing-lamp-blink 1s linear infinite;
+}
+
+.crossing-lamp-bottom {
+  animation-delay: -0.5s;
+}
+
+@keyframes crossing-lamp-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.crossing-schematic[data-train='paused'] .crossing-lamp-top,
+.crossing-schematic[data-train='paused'] .crossing-lamp-bottom {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crossing-train {
+    visibility: hidden;
+  }
+  .crossing-boom,
+  .crossing-lamp-top,
+  .crossing-lamp-bottom {
+    animation: none;
+    transform: none;
+  }
+  .crossing-schematic .crossing-lamps {
+    opacity: 0;
+  }
+}
+
 /* Leaflet controls follow the app palette; attribution must stay readable. */
 .leaflet-container {
   /* Leaflet panes use z-index 400–1000; keep them below the sticky header. */
