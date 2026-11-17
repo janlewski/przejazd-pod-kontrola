@@ -12,6 +12,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 import { Toaster } from '@/components/ui/sonner'
+import { PROJECT } from '@/config/project'
 import { sourceById } from '@/data'
 import { formatDate } from '@/lib/format'
 import { cn } from '@/lib/utils'
@@ -164,6 +165,9 @@ export function AppShell() {
 
           <footer className="border-t bg-card px-4 py-3 text-xs text-muted-foreground md:px-5">
             <p>
+              {PROJECT.authors.join(', ')}, {PROJECT.university}.
+            </p>
+            <p className="mt-1">
               Dane realne: przejazdy kolejowo-drogowe PKP PLK (usługa WFS GUGiK), Generalny Pomiar Ruchu 2025
               (GDDKiA). Dane o kontrolach, zdarzeniach i naruszeniach to DANE FIKCYJNE. Podkład mapy ©{' '}
               <a

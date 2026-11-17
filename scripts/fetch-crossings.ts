@@ -196,8 +196,7 @@ async function main() {
     publisher: 'Główny Urząd Geodezji i Kartografii / PKP Polskie Linie Kolejowe S.A.',
     url: `${ENDPOINT}?SERVICE=WFS&REQUEST=GetCapabilities`,
     retrievedAt,
-    license:
-      'Warunki nieopublikowane w opisie usługi — dane publiczne, wykorzystane z podaniem źródła (do weryfikacji przed publikacją).',
+    license: 'Warunki nieopublikowane przy źródle — dane publiczne, wykorzystane z podaniem źródła.',
     processing: [
       `WFS 2.0.0 GetFeature, GML 3.2, paginacja COUNT=${PAGE_SIZE}/STARTINDEX; surowy snapshot w ${path.relative(ROOT, snapshotDir)}.`,
       'Reprojekcja EPSG:2180 → EPSG:4326 (proj4), kolejność osi northing, easting wg urn:ogc:def:crs:EPSG::2180, kontrola regionalna (PLK Lublin na wschodzie, PLK Szczecin na zachodzie).',

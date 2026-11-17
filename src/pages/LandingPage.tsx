@@ -259,7 +259,9 @@ export default function LandingPage() {
 
       <footer className="border-t">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-5 text-sm text-muted-foreground">
-          <span>{PROJECT.authors.join(', ')}</span>
+          <span>
+            {PROJECT.authors.join(', ')}, {PROJECT.university}
+          </span>
           <a href={PROJECT.repoUrl} target="_blank" rel="noreferrer">
             GitHub
           </a>

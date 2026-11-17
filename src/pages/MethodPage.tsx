@@ -194,8 +194,8 @@ export default function MethodPage() {
                 które również decydują o kategorii (§7–§10).
               </li>
               <li>
-                Warunki licencyjne danych WFS i GPR nie są opublikowane przy źródłach — do potwierdzenia przed
-                publikacją.
+                Warunki licencyjne danych WFS i GPR nie są opublikowane przy źródłach. Dane są publiczne i
+                wykorzystane z podaniem źródła.
               </li>
             </ul>
           </AccordionContent>

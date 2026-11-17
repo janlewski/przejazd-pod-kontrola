@@ -92,8 +92,7 @@ async function main() {
     publisher: 'Generalna Dyrekcja Dróg Krajowych i Autostrad',
     url: GPR_URL,
     retrievedAt,
-    license:
-      'Warunki nieopublikowane przy pliku — dane publiczne, wykorzystane z podaniem źródła (do weryfikacji przed publikacją).',
+    license: 'Warunki nieopublikowane przy źródle — dane publiczne, wykorzystane z podaniem źródła.',
     processing: [
       `Surowy plik ZIP w ${path.relative(ROOT, zipPath)}.`,
       'Odczyt shpjs, reprojekcja ETRS89 / Poland CS92 (EPSG:2180) → WGS84 wg pliku .prj.',

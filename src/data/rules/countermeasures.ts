@@ -110,7 +110,7 @@ export const countermeasures: readonly Countermeasure[] = [
     effectNote: 'Wdrożenia w Wielkiej Brytanii (MCB-OD); brak polskich wyników.',
     sourceUrls: [
       'https://www.railengineer.co.uk/obstacle-detection-for-level-crossings/',
-      'https://www.orr.gov.uk/media/11793',
+      'https://www.orr.gov.uk/sites/default/files/2026-05/manually-controlled-barrier-lx-order-template.docx',
     ],
     responsible: 'PLK',
     legalNote: 'Dz.U. 2025 poz. 1105 nie wymaga detekcji przeszkód (do weryfikacji z zarządcą).',
